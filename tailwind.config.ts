@@ -17,11 +17,12 @@ const config = {
         "2xl": "1400px",
       },
     },
-    width: {
-      content: "1280px",
-      extra: "100vw",
-    },
     extend: {
+      backgroundImage: {
+        "auth-pattern": "url('/images/bg-authentication.jpg')",
+        "auth-pattern-left": "url('/images/bg-authentication-left.jpg')",
+        "footer-pattern": "url('/images/footer-bg.jpg')",
+      },
       colors: {
         carrot: {
           DEFAULT: "var(--carrot)",
