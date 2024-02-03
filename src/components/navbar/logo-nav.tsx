@@ -4,9 +4,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-export default function LogoNav() {
+export default function LogoNav({ className }: { className?: string }) {
   return (
-    <Link href={'/'}>
+    <Link href={'/'} className={className}>
       <Image
         src={'/images/logo-sayurku.png'}
         width={100}

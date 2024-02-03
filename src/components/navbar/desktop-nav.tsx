@@ -5,14 +5,12 @@ import LogoNav from './logo-nav'
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '../ui/navigation-menu';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
 interface DesktopNavProps {
   links: {
     title: string;
     href: string;
   }[]
 }
-
 
 export default function DesktopNav({ links }: DesktopNavProps) {
   return (
