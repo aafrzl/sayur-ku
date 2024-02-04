@@ -86,7 +86,7 @@ export default function SignInPage() {
                             {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
                           </Button>
                           <Input
-                            placeholder='Kata sandi'
+                            placeholder='Kata'
                             type={isPasswordVisible ? 'text' : 'password'}
                             {...field}
                           />

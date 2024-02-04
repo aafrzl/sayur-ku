@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "name": "Kembang Kol",
+    "category": "Aneka Sayuran",
+    "price": 1000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Kembang kol adalah sayuran yang sering dijadikan bahan masakan. Kembang kol memiliki rasa yang lembut dan gurih. Kembang kol juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 2,
+    "name": "Bayam",
+    "category": "Aneka Sayuran",
+    "price": 2000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Bayam adalah sayuran yang sering dijadikan bahan masakan. Bayam memiliki rasa yang lembut dan gurih. Bayam juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 3,
+    "name": "Kangkung",
+    "category": "Aneka Sayuran",
+    "price": 3000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Kangkung adalah sayuran yang sering dijadikan bahan masakan. Kangkung memiliki rasa yang lembut dan gurih. Kangkung juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 4,
+    "name": "Wortel",
+    "category": "Aneka Sayuran",
+    "price": 4000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Wortel adalah sayuran yang sering dijadikan bahan masakan. Wortel memiliki rasa yang lembut dan gurih. Wortel juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 5,
+    "name": "Tomat",
+    "category": "Aneka Sayuran",
+    "price": 5000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Tomat adalah sayuran yang sering dijadikan bahan masakan. Tomat memiliki rasa yang lembut dan gurih. Tomat juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 6,
+    "name": "Bawang Merah",
+    "category": "Aneka Sayuran",
+    "price": 6000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Bawang merah adalah sayuran yang sering dijadikan bahan masakan. Bawang merah memiliki rasa yang lembut dan gurih. Bawang merah juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  },
+  {
+    "id": 7,
+    "name": "Bawang Putih",
+    "category": "Aneka Sayuran",
+    "price": 7000,
+    "unit": "kg",
+    "rating": 4.5,
+    "img": "/images/products/bayam.jpeg",
+    "description": "Bawang putih adalah sayuran yang sering dijadikan bahan masakan. Bawang putih memiliki rasa yang lembut dan gurih. Bawang putih juga memiliki kandungan gizi yang baik untuk kesehatan tubuh.",
+    "sold": 100
+  }
+]

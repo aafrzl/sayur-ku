@@ -1,9 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { zodResolver } from "@hookform/resolvers/zod"
-import z from 'zod'
 
 import {
   Form,
@@ -12,14 +10,16 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import LogoNav from '@/components/navbar/logo-nav'
 import { Button } from '@/components/ui/button'
 import { EyeIcon, EyeOffIcon, LogIn } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
-import OAuthSignIn from '@/components/auth/oauth-signin'
 import { useForm } from 'react-hook-form'
+import React, { useState } from 'react'
+import z from 'zod'
+import LogoNav from '@/components/navbar/logo-nav'
+import Link from 'next/link'
+import OAuthSignIn from '@/components/auth/oauth-signin'
 
 type signUpFormType = z.infer<typeof signUpFormSchema>
 
