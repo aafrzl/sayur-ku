@@ -16,21 +16,23 @@ export default function MobileNav({ links }: MobileNavProps) {
     <div className='flex lg:hidden'>
       <Sheet>
         <SheetTrigger asChild>
-          <Button size={'icon'}>
-            <Menu size={24} />
+          <Button size={'icon'} variant={'ghost'}>
+            <Menu size={24} className='stroke-leaf' />
           </Button>
         </SheetTrigger>
         <SheetContent side={'left'}>
           <SheetHeader>
             <LogoNav />
           </SheetHeader>
-          <div className='flex flex-col items-start gap-4'>
+          <div className='flex flex-col items-start gap-3'>
             {
               links.map((link, index) => (
                 <Button
                   asChild
                   variant={'link'}
-                  key={index}>
+                  key={index}
+                  className='text-lg transition-all duration-200 ease-in-out hover:text-leaf hover:underline-offset-2'
+                  >
                   <Link href={link.href}>
                     {link.title}
                   </Link>

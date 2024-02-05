@@ -16,7 +16,7 @@ export default function ProductCard({ product }: Props) {
   const [isFavorite, setisFavorite] = useState(false)
 
   return (
-    <div className='shadow-lg border hover:shadow-2xl duration-300 transition-all rounded-2xl space-y-4 h-full relative'>
+    <div className='shadow-sm border border-leaf hover:shadow-md hover:shadow-leaf-hover duration-300 transition-all rounded-xl space-y-4 h-full relative max-w-[500px]'>
       <div className='absolute right-2 top-3 z-10'
         onClick={(e) => {
           e.preventDefault()
@@ -24,25 +24,31 @@ export default function ProductCard({ product }: Props) {
           setisFavorite(!isFavorite)
         }}
       >
-        <Heart className={cn(`fill-${isFavorite ? 'leaf' : 'carrot'} stroke-${isFavorite ? 'leaf' : 'carrot'} w-6 h-6 stroke-leaf`, hover.shadow)} />
+        <Heart
+          className={
+            cn('w-6 h-6 stroke-leaf',
+              isFavorite ? 'fill-leaf' : 'stroke-leaf',
+              hover.shadow,
+            )}
+        />
       </div>
       <div className='aspect-square m-3 rounded-2xl relative'>
         <Image
           src={product.img}
           alt={product.name}
           fill
-          sizes='200'
+          sizes='(min-width: 640px) 200px, 100px'
           className='aspect-square object-contain object-center rounded-2xl'
         />
       </div>
       <div className='px-4 space-y-3 pb-6'>
         <div className='space-y-2'>
           {/* ProductName */}
-          <p className='text-sm text-leaf'>
+          <p className='text-sm lg:text-base text-leaf font-semibold'>
             {product.name}
           </p>
           {/* Price */}
-          <p className='font-semibold'>
+          <p className='font-bold'>
             {formatCurrency(product.price)} / {product.unit}
           </p>
           {/* Rating */}
@@ -52,7 +58,6 @@ export default function ProductCard({ product }: Props) {
           </div>
           {/* Button Add To Cart */}
           <Button
-            variant={'outline'}
             className='w-full'
             size={'sm'}
           >

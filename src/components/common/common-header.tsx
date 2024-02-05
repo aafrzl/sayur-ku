@@ -36,10 +36,10 @@ export default function CommonHeader() {
         {/* Right */}
         <div className='flex items-center gap-x-3'>
           <div className='relative'>
-            <Search className='absolute top-1/2 transform -translate-y-1/2 left-2 w-4 h-4' />
+            <Search className='absolute top-1/2 transform -translate-y-1/2 left-2 w-4 h-4 stroke-leaf' />
             <Input
               placeholder='Cari sayuran'
-              className='rounded-full lg:w-50 w-30 h-8 text-sm text-leaf bg-background border border-leaf focus:outline-none focus:border-leaf hover:shadow-md transition-shadow duration-300 ease-in-out pl-8'
+              className='rounded-xl lg:w-50 w-30 text-sm text-leaf bg-background border border-leaf focus:outline-none focus:border-leaf hover:shadow-md transition-shadow duration-300 ease-in-out pl-8'
             />
           </div>
           <CommonNotificationBadge

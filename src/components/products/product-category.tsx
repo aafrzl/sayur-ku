@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@/lib/utils';
-import { IconFruit, IconFungi, IconGinger, IconVegetable } from '@/components/icons/index';
+import { IconBeans, IconFruit, IconFungi, IconGinger, IconOnion, IconVegetable } from '@/components/icons/index';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { hover } from '@/lib/hover';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const _renderIcon = (indentifier: string) => {
-  const iconSize = "w-20 h-20"
+  const iconSize = "w-14 h-14 lg:w-20 lg:h-20"
 
   switch (indentifier) {
     case 'IconFungi':
@@ -22,9 +22,9 @@ const _renderIcon = (indentifier: string) => {
     case "IconVegetable":
       return <IconVegetable className={cn(iconSize, 'fill-carrot')} />
     case "IconOnion":
-      return <IconVegetable className={cn(iconSize, 'fill-carrot')} />
-    case "Iconbeans":
-      return <IconVegetable className={cn(iconSize, 'fill-carrot')} />
+      return <IconOnion className={cn(iconSize, 'fill-carrot')} />
+    case "IconBeans":
+      return <IconBeans className={cn(iconSize, 'fill-carrot')} />
     case "IconGinger":
       return <IconGinger className={cn(iconSize, 'fill-carrot')} />
     default:
@@ -41,7 +41,7 @@ export default function ProductCategory({ id, icon, title }: Props) {
       >
         <div className='flex flex-1 items-center rounded-xl py-6 px-4 gap-6'>
           {_renderIcon(icon)}
-          <p className='flex flex-1 text-carrot text-xl font-semibold'>
+          <p className='flex flex-1 text-carrot text-lg lg:text-xl font-semibold'>
             {title}
           </p>
         </div>
