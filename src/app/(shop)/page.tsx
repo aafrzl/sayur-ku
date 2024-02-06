@@ -14,7 +14,7 @@ export default function Home() {
     <main className="flex w-full items-center justify-between py-4">
       <div className="container m-auto flex flex-col">
         <SliderImage />
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col mt-10">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-leaf text-xl md:text-2xl">
               Produk Unggulan

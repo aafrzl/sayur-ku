@@ -42,27 +42,23 @@ export default function CommonHeader() {
               className='rounded-xl lg:w-50 w-30 text-sm text-leaf bg-background border border-leaf focus:outline-none focus:border-leaf hover:shadow-md transition-shadow duration-300 ease-in-out pl-8'
             />
           </div>
-          <CommonNotificationBadge
-            notificationDetail={{ color: "bg-carrot" }}
+          <Button
+            size='icon'
+            className={cn('gap-x-1 rounded-full items-center flex text-leaf border-leaf', hover.shadow)}
+            variant='outline'
+            aria-label={`${0}-items-in-cart`}
+            asChild
           >
-            <Button
-              size='icon'
-              className={cn('gap-x-1 rounded-full items-center flex text-leaf', hover.shadow)}
-              variant='outline'
-              aria-label={`${0}-items-in-cart`}
-              asChild
-            >
-              <Link href='/checkout'>
-                <Heart className='w-4 h-4' />
-              </Link>
-            </Button>
-          </CommonNotificationBadge>
+            <Link href='/wishlist'>
+              <Heart className='w-4 h-4' />
+            </Link>
+          </Button>
           <CommonNotificationBadge
             notificationDetail={{ count: 0, color: "bg-carrot" }}
           >
             <Button
               size='icon'
-              className={cn('gap-x-1 rounded-full items-center flex text-leaf', hover.shadow)}
+              className={cn('gap-x-1 rounded-full items-center flex text-leaf border-leaf', hover.shadow)}
               variant='outline'
               aria-label={`${0}-items-in-cart`}
               asChild
@@ -77,12 +73,11 @@ export default function CommonHeader() {
           ) : (
             <Button
               asChild
-              size={'sm'}
               variant={'outline'}
               className={cn('rounded-full items-center flex text-leaf gap-x-1', hover.shadow)}
             >
               <Link href='/sign-in'>
-                <LogIn className='w-4 h-4 mr-1' /> Sign In
+                <LogIn className='w-4 h-4 mr-1' /> Login
               </Link>
             </Button>
           )}
