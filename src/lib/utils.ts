@@ -10,5 +10,5 @@ export function formatNumber(num: number) {
 }
 
 export function formatCurrency(num: number) {
-  return `Rp${formatNumber(num)}`;
+  return `Rp ${formatNumber(num)}`;
 }

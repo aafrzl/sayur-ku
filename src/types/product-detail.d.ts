@@ -8,4 +8,5 @@ export type ProductDetail = {
   img: string;
   description: string;
   sold: number;
+  itemCount?: number;
 };
