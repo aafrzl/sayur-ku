@@ -6,11 +6,9 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 
-import React from 'react'
-import { AspectRatio } from '../ui/aspect-ratio'
-import Image from "next/image"
-import Autoplay from 'embla-carousel-autoplay'
 import { bannerImages } from "@/lib/data/bannerImages"
+import Autoplay from 'embla-carousel-autoplay'
+import Image from "next/image"
 
 export default function SliderImage() {
   return (
@@ -20,11 +18,11 @@ export default function SliderImage() {
       <CarouselContent>
         {bannerImages.map((image, index) => (
           <CarouselItem key={index}>
-            <AspectRatio ratio={936 / 294}>
+            <div className="relative aspect-video lg:aspect-[936/294] transition-all duration-200 ease-in">
               <Image
                 src={image.imageUrl}
                 alt={image.title}
-                className="w-full h-full object-cover rounded-md"
+                className="object-cover object-center rounded-md"
                 fill
               />
               <div
@@ -33,7 +31,7 @@ export default function SliderImage() {
               <p className="absolute top-1/2 left-5 font-semibold text-white md:text-xl lg:text-2xl">
                 {image.title}
               </p>
-            </AspectRatio>
+            </div>
           </CarouselItem>
         ))}
       </CarouselContent>

@@ -12,10 +12,10 @@ interface Props {
 export default function ProductShowcase({ products, gridConfig }: Props) {
   return (
     <div className="w-full">
-      <div className={cn("grid gap-5 transition-all duration-200 ease-in", gridConfig)}>
+      <div className={cn("grid gap-5 transition-all duration-300 ease-in", gridConfig)}>
         {/* Mapping product cards */}
         {products.map((product) => (
-          <Link href={`/product/${product.id}`} key={product.id}>
+          <Link href={`/product/detail/${product.id}`} key={product.id}>
             <ProductCard product={product} />
           </Link>
         ))}

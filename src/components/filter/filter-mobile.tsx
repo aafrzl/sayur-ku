@@ -11,6 +11,8 @@ import {
   DrawerTrigger
 } from "@/components/ui/drawer"
 import { Separator } from "@/components/ui/separator"
+import { hover } from "@/lib/hover"
+import { cn } from "@/lib/utils"
 import { Filter } from "lucide-react"
 
 export default function FilterMobile() {
@@ -20,7 +22,7 @@ export default function FilterMobile() {
         <DrawerTrigger asChild>
           <Button
             variant={'outline'}
-            className="flex gap-x-1 rounded-xl">
+            className={cn("flex gap-x-1 rounded-xl border-leaf text-leaf", hover.shadow)}>
             <Filter className="w-4 h-4" />
             <span>Filter Produk</span>
           </Button>

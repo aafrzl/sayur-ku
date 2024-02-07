@@ -32,13 +32,13 @@ export default function UserAccountNav() {
           <DropdownMenuItem asChild className='cursor-pointer'>
             <Link href='/account'>
               <UserIcon className='mr-2 h-4 w-4' aria-hidden='true' />
-              Account
+              Akun
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild className='cursor-pointer'>
             <Link href='/history'>
               <ShoppingBag className='mr-2 h-4 w-4' aria-hidden='true' />
-              History Orders
+              Riwayat Belanja
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -48,9 +48,9 @@ export default function UserAccountNav() {
           className='cursor-pointer'
           asChild
         >
-          <div>
+          <div className='text-rose-500'>
             <LogOut className='mr-2 h-4 w-4' aria-hidden='true' />
-            Sign out
+            Keluar
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

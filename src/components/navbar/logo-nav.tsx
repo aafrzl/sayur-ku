@@ -12,7 +12,7 @@ export default function LogoNav({ className }: { className?: string }) {
         width={100}
         height={100}
         alt='Sayurku Logo'
-        className={cn('object-contain object-center hover:scale-110', hover.shadow)}
+        className={cn('object-contain object-center hover:scale-110 h-auto w-auto', hover.shadow)}
       />
     </Link>
   )

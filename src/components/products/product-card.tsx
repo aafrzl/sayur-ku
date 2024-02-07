@@ -60,6 +60,11 @@ export default function ProductCard({ product }: Props) {
           <Button
             className='w-full'
             size={'sm'}
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              console.log('Add to cart')
+            }}
           >
             <ShoppingBag className='w-4 h-4 sm:w-5 sm:h-5' />
             <span className='ml-1 text-xs md:text-sm'>Tambah Keranjang</span>

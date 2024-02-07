@@ -8,24 +8,10 @@ import { hover } from '@/lib/hover';
 import UserAccountNav from '../auth/user-account-nav';
 import DesktopNav from '../navbar/desktop-nav';
 import { Input } from '../ui/input';
+import { links } from '@/lib/data/links';
 
 export default function CommonHeader() {
   const isSignedIn = true;
-
-  const links = [
-    {
-      title: "Home",
-      href: "/"
-    },
-    {
-      title: "Product",
-      href: "/product"
-    },
-    {
-      title: "Tentang Kami",
-      href: "/about"
-    },
-  ]
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-background py-3'>
