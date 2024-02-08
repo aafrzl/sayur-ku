@@ -31,12 +31,12 @@ export default function ProductPage() {
                   <FilterMobile />
                   <Select>
                     <SelectTrigger defaultValue={'harga-terendah'}
-                      className={cn("border-leaf", hover.shadow)}
+                      className={cn("border-leaf rounded-xl text-leaf", hover.shadow)}
                     >
                       <SelectValue placeholder='Urut berdasarkan' />
                     </SelectTrigger>
                     <SelectContent className='border-leaf'>
-                      <SelectGroup>
+                      <SelectGroup className='text-leaf'>
                         <SelectItem value="harga-terendah">Harga Terendah</SelectItem>
                         <SelectItem value="harga-tertinggi">Harga Tertinggi</SelectItem>
                       </SelectGroup>
