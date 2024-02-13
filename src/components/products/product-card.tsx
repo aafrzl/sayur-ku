@@ -66,7 +66,7 @@ export default function ProductCard({ product }: Props) {
               console.log('Add to cart')
             }}
           >
-            <ShoppingBag className='w-4 h-4 sm:w-5 sm:h-5' />
+            <ShoppingBag className='w-5 h-5 hidden lg:block' />
             <span className='ml-1 text-xs md:text-sm'>Tambah Keranjang</span>
           </Button>
         </div>

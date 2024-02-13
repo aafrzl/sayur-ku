@@ -52,7 +52,7 @@ export default function ProductHistory({ products }: Props) {
               </p>
             </div>
           </div>
-          <div className='flex justify-between items-center'>
+          <div className='flex flex-col md:flex-row justify-between items-start'>
             <div className='flex flex-col gap-2 mt-2'>
               <p className='text-sm font-medium'>Total Belanja</p>
               <p className='text-sm font-semibold'>{formatCurrency(product.price * 2)}</p>
@@ -63,7 +63,7 @@ export default function ProductHistory({ products }: Props) {
                   Lihat Detail Transaksi
                 </Link>
               </Button>
-              <Button asChild size={'sm'} className={cn('text-white', hover.shadow)}>
+              <Button asChild className={cn('text-white', hover.shadow)}>
                 <Link href={'/products'}>
                   Beli Lagi
                 </Link>

@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, ShoppingBag, UserIcon } from 'lucide-react'
+import { HeartIcon, LogOut, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import UserAvatar from './user-avatar'
@@ -39,6 +39,12 @@ export default function UserAccountNav() {
             <Link href='/history'>
               <ShoppingBag className='mr-2 h-4 w-4' aria-hidden='true' />
               Riwayat Belanja
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className='cursor-pointer'>
+            <Link href='/wishlist'>
+              <HeartIcon className='mr-2 h-4 w-4' aria-hidden='true' />
+              Wishlist
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

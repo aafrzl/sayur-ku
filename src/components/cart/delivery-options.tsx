@@ -4,9 +4,9 @@ import { cn } from '@/lib/utils';
 import { CheckCheck, CopyCheck, Copy } from 'lucide-react';
 import React, { useState } from 'react'
 import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
+import { AutosizeTextarea } from '../ui/textarea';
 
 interface DeliveryOptionsProps {
   deliveryMethods: string;
@@ -67,8 +67,10 @@ export default function DeliveryOptions({ deliveryMethods, setDeliveryMethods }:
           <Input
             placeholder='Masukkan nomor telepon'
           />
-          <Textarea
+          <AutosizeTextarea
             placeholder='Masukkan alamat lengkap'
+            maxHeight={200}
+            minHeight={80}
           />
         </div>
       )}

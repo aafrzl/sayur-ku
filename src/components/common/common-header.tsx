@@ -1,14 +1,14 @@
-import { Heart, LogIn, Search, ShoppingCart } from 'lucide-react';
-import MobileNav from '../navbar/mobile-nav';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import CommonNotificationBadge from './common-notification-badge';
-import { cn } from '@/lib/utils';
+import { links } from '@/lib/data/links';
 import { hover } from '@/lib/hover';
+import { cn } from '@/lib/utils';
+import { LogIn, Search, ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
 import UserAccountNav from '../auth/user-account-nav';
 import DesktopNav from '../navbar/desktop-nav';
+import MobileNav from '../navbar/mobile-nav';
+import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { links } from '@/lib/data/links';
+import CommonNotificationBadge from './common-notification-badge';
 
 export default function CommonHeader() {
   const isSignedIn = true;
@@ -28,17 +28,6 @@ export default function CommonHeader() {
               className='rounded-xl lg:w-50 w-30 text-sm text-leaf bg-background border border-leaf focus:outline-none focus:border-leaf hover:shadow-md transition-shadow duration-300 ease-in-out pl-8'
             />
           </div>
-          <Button
-            size='icon'
-            className={cn('gap-x-1 rounded-full items-center flex text-leaf border-leaf', hover.shadow)}
-            variant='outline'
-            aria-label={`${0}-items-in-cart`}
-            asChild
-          >
-            <Link href='/wishlist'>
-              <Heart className='w-4 h-4' />
-            </Link>
-          </Button>
           <CommonNotificationBadge
             notificationDetail={{ count: 0, color: "bg-carrot" }}
           >
@@ -57,15 +46,16 @@ export default function CommonHeader() {
           {isSignedIn ? (
             <UserAccountNav />
           ) : (
-            <Button
-              asChild
-              variant={'outline'}
-              className={cn('rounded-full items-center flex text-leaf gap-x-1', hover.shadow)}
-            >
-              <Link href='/sign-in'>
-                <LogIn className='w-4 h-4 mr-1' /> Login
-              </Link>
-            </Button>
+
+              <Button
+                asChild
+                variant={'outline'}
+                className={cn('rounded-full items-center flex text-leaf gap-x-1 px-3 lg:px-5', hover.shadow)}
+              >
+                <Link href='/sign-in'>
+                  <LogIn className='w-4 h-4 mr-1' /> Login
+                </Link>
+              </Button>
           )}
         </div>
       </nav>

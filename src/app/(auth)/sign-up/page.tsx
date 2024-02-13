@@ -46,7 +46,7 @@ export default function SignUpPage() {
 
   return (
     <div className='mx-auto'>
-      <Card className='w-[400px] xl:w-[500px]'>
+      <Card className='max-w-[350px] min-w-[350px] xl:w-[500px]'>
         <CardHeader className='items-center'>
           <LogoNav />
           <CardTitle className='text-leaf font-semibold text-lg'>

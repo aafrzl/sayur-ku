@@ -13,7 +13,7 @@ interface Props {
 export default function DashboardUser({ name, image }: Props) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger >
         <UserAvatar user={{
           name: name || null,
           image: image || null,
@@ -21,7 +21,7 @@ export default function DashboardUser({ name, image }: Props) {
           className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-10 h-10 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='mx-5'>
         <DropdownMenuItem
           onClick={() => console.log('logout')}
           className='cursor-pointer'
@@ -29,7 +29,7 @@ export default function DashboardUser({ name, image }: Props) {
         >
           <div className='text-rose-500'>
             <LogOut className='mr-2 h-4 w-4' aria-hidden='true' />
-            Keluar
+            Logout
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

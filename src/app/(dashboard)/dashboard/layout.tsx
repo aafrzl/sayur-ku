@@ -7,9 +7,9 @@ import LogoNav from '@/components/navbar/logo-nav'
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className='flex'>
-      <div className='flex flex-col justify-between h-screen sticky top-0 w-64 bg-satin p-10'>
+      <div className='flex flex-col justify-between h-screen sticky top-0 w-80 bg-satin p-10'>
         {/* Left Sidebar */}
-        <div className=' flex flex-col gap-y-4'>
+        <div className='flex flex-col gap-y-4'>
           <LogoNav />
           <DashboardNav />
         </div>

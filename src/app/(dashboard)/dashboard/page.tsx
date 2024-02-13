@@ -1,7 +1,8 @@
 import DashboardCardRevenue from '@/components/dashboard/dashboard-card-revenue'
 import { Overview } from '@/components/dashboard/dashboard-charts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { dataDashboardOrders } from '@/lib/data/dashboardData'
+import PlaygroundPages from '@/components/dashboard/dashboard-playground-pages'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { dataDashboardOrders, dataPlaygroundPages } from '@/lib/data/dashboardData'
 
 //TODO: Implement Dashboard Page
 //TODO: Implement Product Page (CRUD)
@@ -24,14 +25,28 @@ export default function DashboardPage() {
           />
         ))}
       </div>
-      <Card className='w-full'>
-        <CardHeader>
-          <CardTitle>Overview</CardTitle>
-        </CardHeader>
-        <CardContent className="pl-2">
-          <Overview />
-        </CardContent>
-      </Card>
+      <div className='grid grid-cols-7 gap-4 w-full'>
+        <Card className='col-span-4'>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <Overview />
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>Website</CardTitle>
+            <CardDescription>
+              <span className='text-xl font-semibold'>{dataPlaygroundPages.stat}</span>
+              <span className='text-muted-foreground'> Total views</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PlaygroundPages />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

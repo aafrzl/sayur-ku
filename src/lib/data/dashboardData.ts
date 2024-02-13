@@ -124,3 +124,25 @@ export const dataDashboardUsers = [
     email: "olivia@email.com",
   },
 ];
+
+export const dataPlaygroundPages = {
+  stat: Math.floor(Math.random() * 5000) + 1000,
+  pages: [
+    {
+      title: "Home",
+      views: Math.floor(Math.random() * 500) + 100,
+    },
+    {
+      title: "About",
+      views: Math.floor(Math.random() * 500) + 100,
+    },
+    {
+      title: "Services",
+      views: Math.floor(Math.random() * 500) + 100,
+    },
+    {
+      title: "Contact",
+      views: Math.floor(Math.random() * 500) + 100,
+    },
+  ],
+};
