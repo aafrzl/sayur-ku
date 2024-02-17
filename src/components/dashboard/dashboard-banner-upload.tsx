@@ -16,14 +16,14 @@ type uploadImageBanner = z.infer<typeof uploadImageBannerSchema>
 const uploadImageBannerSchema = z.object({
   image:
     z.custom<File | undefined>()
-      .refine((file) => !file || file instanceof File, 'Foto produk harus diisi')
       .refine(
-        (file) => !file || (file instanceof File && file.type.startsWith('image/*')),
-        'Foto produk harus berupa gambar'
+        (file) => !file || (file instanceof File && file.type.startsWith('image/')),
+        'Foto banner harus berupa gambar'
       )
       .refine((file) => {
-        return !file || file.size < 2 * 1024 * 1024
-      }, 'Foto produk tidak boleh lebih dari 2MB')
+        return !file || file.size < 1024 * 1024 * 2;
+      }, 'Foto banner tidak boleh lebih dari 2MB')
+      .refine((file) => file instanceof File, 'Foto banner tidak boleh kosong')
 })
 
 export default function DashboardBannerUpload() {
@@ -60,40 +60,18 @@ export default function DashboardBannerUpload() {
                     <Input
                       id="image"
                       type="file"
-                      accept="image/*"
+                      accept="image/"
                       onChange={(e) => {
-                        const file = e.target.files?.[0]
-                        if (file) {
-                          setImages(file)
+                        const files = e.target.files
+
+                        if (files) {
+                          const image = files[0]
+                          setImages(image)
+                          field.onChange(image)
                         }
-                        field.onChange(e)
                       }}
                       className="border-leaf border-2 border-dashed text-leaf file:text-carrot cursor-pointer file:cursor-pointer"
                     />
-                    {images && (
-                      <div
-                        className='aspect-video relative col-span-4 h-24'
-                      >
-                        <Image
-                          src={URL.createObjectURL(images)}
-                          alt={images.name}
-                          className='object-cover rounded-xl'
-                          fill
-                        />
-                        <Button
-                          type='button'
-                          className='absolute top-1 right-1 w-8 h-8'
-                          onClick={() => {
-                            setImages(undefined)
-                            field.onChange({ target: { value: undefined } })
-                          }}
-                          size={'icon'}
-                        >
-                          <Trash className='w-4 h-4' />
-                        </Button>
-                        ))
-                      </div>
-                    )}
                   </div>
                 </FormControl>
                 <FormMessage />

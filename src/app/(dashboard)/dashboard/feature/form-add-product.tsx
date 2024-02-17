@@ -33,12 +33,14 @@ type Product = z.infer<typeof productSchema>
 
 const productSchema = z.object({
   title: z.string().min(1, { message: "Nama produk tidak boleh kosong" }).max(50, { message: "Nama produk tidak boleh lebih dari 50 karakter" }),
-  price: z.coerce.number().min(1, { message: "Harga produk tidak boleh kosong" }).nonnegative({ message: "Harga produk tidak boleh negatif" }).int({ message: "Harga produk harus berupa bilangan bulat" }),
-  stock: z.coerce.number().min(1, { message: "Stok produk tidak boleh kosong" }).nonnegative({ message: "Stok produk tidak boleh negatif" }).int({ message: "Harga produk harus berupa bilangan bulat" }),
+  price: z.string().min(1, { message: "Harga tidak boleh kosong" }).regex(/^\d+$/, 'Must be a number'),
+  stock: z.string().min(1, { message: "Stok tidak boleh kosong" }).regex(/^\d+$/, 'Must be a number').max(10, { message: "Stok tidak boleh lebih dari 10 digit" }),
   description: z.string().min(1, { message: "Deskripsi produk tidak boleh kosong" }).max(500, { message: "Deskripsi produk tidak boleh lebih dari 500 karakter" }),
   image:
     z.custom<File | undefined>()
-      .refine((file) => !file || file instanceof File, 'Foto produk harus diisi')
+      .refine(
+        (file) => file instanceof File, 'Foto produk harus diisi'
+      )
       .refine(
         (file) => !file || (file instanceof File && file.type.startsWith('image/')),
         'Foto produk harus berupa gambar'
@@ -119,7 +121,9 @@ export default function FormAddProduct() {
                       <Button
                         type="button"
                         onClick={() => {
-                          form.resetField('image')
+                          form.reset({
+                            image: undefined,
+                          })
                           setImages(undefined)
                         }}
                         size={'icon'}
