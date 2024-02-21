@@ -24,15 +24,15 @@ export default function DashboardCardRevenue({ title, value, icon }: Props) {
   const _renderIcon = (icon: string) => {
     switch (icon) {
       case "shoppingCart":
-        return <ShoppingCartIcon size={24} className="text-leaf" />
+        return <ShoppingCartIcon size={24} />
       case "currencyDollar":
-        return <DollarSign size={24} className="text-leaf" />
+        return <DollarSign size={24} />
       case "chartBar":
-        return <BarChart size={24} className="text-leaf" />
+        return <BarChart size={24} />
       case "userIcon":
-        return <UserIcon size={24} className="text-leaf" />
+        return <UserIcon size={24} />
       default:
-        return <ShoppingCartIcon size={24} className="text-leaf" />
+        return <ShoppingCartIcon size={24} />
     }
   }
 

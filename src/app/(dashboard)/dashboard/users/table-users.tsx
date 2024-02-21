@@ -1,5 +1,6 @@
 'use client'
 
+import CommonPagination from "@/components/common/common-pagination"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -44,6 +45,7 @@ export default function TableUsers() {
             ))}
           </TableBody>
         </Table>
+        <CommonPagination page={1} total={10} />
       </CardContent>
     </Card>
   )
