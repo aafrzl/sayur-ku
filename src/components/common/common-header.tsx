@@ -1,17 +1,21 @@
+'use client'
+
 import { links } from '@/lib/data/links';
 import { hover } from '@/lib/hover';
 import { cn } from '@/lib/utils';
 import { LogIn, Search, ShoppingCart } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import UserAccountNav from '../auth/user-account-nav';
 import DesktopNav from '../navbar/desktop-nav';
 import MobileNav from '../navbar/mobile-nav';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { Skeleton } from '../ui/skeleton';
 import CommonNotificationBadge from './common-notification-badge';
+import UserAccountNav from '../auth/user-account-nav';
 
 export default function CommonHeader() {
-  const isSignedIn = true;
+  const { status } = useSession();
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-background py-3'>
@@ -43,19 +47,22 @@ export default function CommonHeader() {
               </Link>
             </Button>
           </CommonNotificationBadge>
-          {isSignedIn ? (
+          {status === "loading" && (
+            <Skeleton className='w-28 h-10 rounded-xl' />
+          )}
+          {status === "authenticated" && (
             <UserAccountNav />
-          ) : (
-
-              <Button
-                asChild
-                variant={'outline'}
-                className={cn('rounded-full items-center flex text-leaf gap-x-1 px-3 lg:px-5', hover.shadow)}
-              >
-                <Link href='/sign-in'>
-                  <LogIn className='w-4 h-4 mr-1' /> Login
-                </Link>
-              </Button>
+          )}
+          {status === "unauthenticated" && (
+            <Button
+              asChild
+              variant={'outline'}
+              className={cn('rounded-full items-center flex text-leaf gap-x-1 px-3 lg:px-5', hover.shadow)}
+            >
+              <Link href='/sign-in'>
+                <LogIn className='w-4 h-4 mr-1' /> Login
+              </Link>
+            </Button>
           )}
         </div>
       </nav>

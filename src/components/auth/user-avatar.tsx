@@ -3,9 +3,10 @@ import { User2 } from 'lucide-react'
 import Image from 'next/image'
 import { FC } from 'react'
 import { Avatar, AvatarFallback } from '../ui/avatar'
+import { User } from '@prisma/client'
 
 interface UserAvatarProps extends AvatarProps {
-  user: Pick<any, 'image' | 'name'>
+  user: Pick<User, 'image' | 'name'>
 }
 
 const UserAvatar: FC<UserAvatarProps> = ({ user, ...props }) => {

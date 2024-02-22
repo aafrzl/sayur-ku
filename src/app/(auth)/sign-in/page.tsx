@@ -3,9 +3,11 @@
 import LogoNav from '@/components/navbar/logo-nav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { zodResolver } from "@hookform/resolvers/zod"
-import React, { useState } from 'react'
+import { useState } from 'react'
 import z from 'zod'
 
+import OAuthSignIn from '@/components/auth/oauth-signin'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -13,13 +15,14 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { EyeIcon, EyeOffIcon, LogIn } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
-import OAuthSignIn from '@/components/auth/oauth-signin'
+import { toast } from '@/components/ui/use-toast'
+import { EyeIcon, EyeOffIcon, LogIn } from 'lucide-react'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 type signInFormType = z.infer<typeof signInFormSchema>
 
@@ -29,6 +32,7 @@ const signInFormSchema = z.object({
 })
 
 export default function SignInPage() {
+  const router = useRouter()
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
@@ -36,13 +40,41 @@ export default function SignInPage() {
     resolver: zodResolver(signInFormSchema),
   })
 
-  const onSubmit = (data: signInFormType) => {
-    console.log(data)
+  const onSubmit = async (data: signInFormType) => {
+    try {
+      const user = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/",
+        redirect: false
+      })
+
+      if (!user?.error) {
+        toast({
+          title: "Berhasil Masuk",
+          description: "Anda berhasil masuk.",
+          duration: 5000
+        })
+        router.push('/')
+      } else {
+        toast({
+          title: "Gagal Masuk",
+          description: "Email atau password salah.",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Gagal Masuk",
+        description: "Terjadi kesalahan saat masuk. Silahkan coba lagi nanti.",
+        variant: "destructive"
+      })
+    }
   }
 
   return (
     <div className='mx-auto'>
-      <Card className='max-w-[350px] min-w-[350px] xl:w-[500px]'>
+      <Card className='max-w-[500px] min-w-[350px] xl:w-[500px]'>
         <CardHeader className='items-center'>
           <LogoNav />
           <CardTitle className='text-leaf font-semibold text-lg'>

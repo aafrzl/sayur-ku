@@ -40,13 +40,12 @@ export default function SignUpPage() {
     resolver: zodResolver(signUpFormSchema),
   })
 
-  const onSubmit = (data: signUpFormType) => {
-    console.log(data)
+  const onSubmit = async (data: signUpFormType) => {
   }
 
   return (
     <div className='mx-auto'>
-      <Card className='max-w-[350px] min-w-[350px] xl:w-[500px]'>
+      <Card className='max-w-[500px] min-w-[350px] xl:w-[500px]'>
         <CardHeader className='items-center'>
           <LogoNav />
           <CardTitle className='text-leaf font-semibold text-lg'>

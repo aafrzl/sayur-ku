@@ -4,14 +4,17 @@ import { HeartIcon, LogOut, ShoppingBag, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import UserAvatar from './user-avatar'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function UserAccountNav() {
+  const { data: session } = useSession()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none'>
         <UserAvatar user={{
-          name: 'Shadcn' || null,
-          image: 'https://github.com/shadcn.png' || null,
+          image: session?.user?.image,
+          name: session?.user?.name
         }}
           className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-10 h-10 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
         />
@@ -20,9 +23,9 @@ export default function UserAccountNav() {
       <DropdownMenuContent className='bg-white' align='end'>
         <div className='flex items-center justify-center gap-2 p-2'>
           <div className='flex flex-col space-y-1 leading-none'>
-            <p className='text-sm font-medium'>Shadcn</p>
+            <p className='text-sm font-medium'>{session?.user.name}</p>
             <p className='w-[200px] truncate text-xs text-muted-foreground'>
-              shadcn@email.com
+              {session?.user?.email}
             </p>
           </div>
         </div>
@@ -50,7 +53,7 @@ export default function UserAccountNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => console.log('logout')}
+          onClick={() => signOut()}
           className='cursor-pointer'
           asChild
         >

@@ -4,6 +4,7 @@ import React from 'react'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
+import AuthProviders from '@/components/providers/auth-providers'
 
 //TODO: Ganti nama aplikasi ada yang sama hehehe :)
 
@@ -60,8 +61,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(font.className, "text-neutral-800")}>
-        {children}
-        <Toaster />
+        <AuthProviders>
+          {children}
+          <Toaster />
+        </AuthProviders>
       </body>
     </html>
   )
