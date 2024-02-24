@@ -8,8 +8,12 @@ import LogoNav from '@/components/navbar/logo-nav'
 import { cn } from '@/lib/utils'
 import { ChevronsLeft, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useSession } from 'next-auth/react'
+import { User } from 'next-auth'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession()
+
   const isResizing = useRef(false);
   const sidebarRef = useRef<ElementRef<'aside'>>(null);
   const [isResetting, setIsResetting] = useState(false);
@@ -93,7 +97,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 onClick={collapse}
                 variant={'ghost'}
                 size={'icon'}
-                  className='absolute top-5 right-6'
+                className='absolute top-5 right-6'
               >
                 <ChevronsLeft className='w-6 h-6 text-leaf' />
               </Button>
@@ -106,10 +110,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
         <div className={cn("hidden gap-x-2 items-center", !isCollapsed && "flex")}>
           <DashboardUser
-            name='Shadcn'
-            image='https://github.com/shadcn.png'
+            session={session?.user}
           />
-          <p className='text-leaf font-semibold'>Shadcn</p>
+          <p className='text-leaf font-semibold'>
+            {session?.user?.name}
+          </p>
         </div>
         <div
           onMouseDown={handleMouseDown}

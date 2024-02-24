@@ -4,11 +4,6 @@ import PlaygroundPages from '@/components/dashboard/dashboard-playground-pages'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { dataDashboardOrders, dataPlaygroundPages } from '@/lib/data/dashboardData'
 
-//TODO: Implement Dashboard Page
-//TODO: Implement Product Page (CRUD)
-//TODO: Implement Feature Page (CRUD)
-//TODO: Implement Orders Page (CRUD)
-//TODO: Implement User Page (CRUD)
 export default function DashboardPage() {
   return (
     <div className='flex flex-col items-center min-h-screen gap-4 py-14'>

@@ -4,13 +4,16 @@ import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import UserAvatar from '../auth/user-avatar'
 import { LogOut } from 'lucide-react'
+import { User } from '@prisma/client'
+import { signOut } from 'next-auth/react'
 
 interface Props {
-  name: string,
-  image: string,
+  session: User
 }
 
-export default function DashboardUser({ name, image }: Props) {
+export default function DashboardUser({ session }: Props) {
+  const { name, image } = session
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger >
@@ -23,7 +26,7 @@ export default function DashboardUser({ name, image }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='mx-5'>
         <DropdownMenuItem
-          onClick={() => console.log('logout')}
+          onClick={() => signOut()}
           className='cursor-pointer'
           asChild
         >

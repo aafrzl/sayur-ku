@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/sign-in",
+    signIn: "/sign-in",
   },
   providers: [
     Credentials({
@@ -28,24 +28,34 @@ export const authOptions: NextAuthOptions = {
           credentials?.email === user?.email &&
           bcrypt.compareSync(credentials?.password!, user?.password!)
         ) {
-          return user;
+          return Promise.resolve(user);
         }
-        return null;
+        return Promise.resolve(null);
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async session({ token, session }) {
       if (session?.user) {
         session.user.id = token.uid;
+        session.user.isAdmin = token.isAdmin;
       }
 
       return session;
     },
     jwt: async ({ user, token }) => {
+      const dbUser = await prisma.user.findUnique({
+        where: {
+          email: token.email!,
+        },
+      });
+
       if (user) {
         token.uid = user.id;
+        token.isAdmin = Boolean(dbUser?.isAdmin);
       }
+
       return token;
     },
   },

@@ -9,7 +9,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Trash } from 'lucide-react'
-//TODO: Add validation for file type and size
 
 type uploadImageBanner = z.infer<typeof uploadImageBannerSchema>
 

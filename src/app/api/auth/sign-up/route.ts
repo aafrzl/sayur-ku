@@ -8,6 +8,21 @@ export async function POST(req: Request) {
     const payload = await req.json();
 
     const { name, email, password } = payload;
+    
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists) {
+      return NextResponse.json(
+        {
+          error: "Email sudah terdaftar.",
+        },
+        { status: 400 }
+      );
+    }
 
     const data: Prisma.UserCreateInput = {
       name,

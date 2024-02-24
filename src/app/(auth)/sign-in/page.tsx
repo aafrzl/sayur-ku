@@ -1,75 +1,18 @@
-'use client'
-
 import LogoNav from '@/components/navbar/logo-nav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from 'react'
-import z from 'zod'
-
 import OAuthSignIn from '@/components/auth/oauth-signin'
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { toast } from '@/components/ui/use-toast'
-import { EyeIcon, EyeOffIcon, LogIn } from 'lucide-react'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import LoginForm from './login-form'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
-type signInFormType = z.infer<typeof signInFormSchema>
-
-const signInFormSchema = z.object({
-  email: z.string().email('Email tidak valid').min(1, "Email tidak boleh kosong"),
-  password: z.string().min(6, "Password minimal 6 karakter"),
-})
-
-export default function SignInPage() {
-  const router = useRouter()
-
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-
-  const form = useForm<signInFormType>({
-    resolver: zodResolver(signInFormSchema),
-  })
-
-  const onSubmit = async (data: signInFormType) => {
-    try {
-      const user = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        callbackUrl: "/",
-        redirect: false
-      })
-
-      if (!user?.error) {
-        toast({
-          title: "Berhasil Masuk",
-          description: "Anda berhasil masuk.",
-          duration: 5000
-        })
-        router.push('/')
-      } else {
-        toast({
-          title: "Gagal Masuk",
-          description: "Email atau password salah.",
-          variant: "destructive"
-        })
-      }
-    } catch (error) {
-      toast({
-        title: "Gagal Masuk",
-        description: "Terjadi kesalahan saat masuk. Silahkan coba lagi nanti.",
-        variant: "destructive"
-      })
-    }
+export default async function SignInPage() {
+  const session = await getServerSession(authOptions)
+  
+  if (session) {
+    return redirect('/')
   }
 
   return (
@@ -83,61 +26,13 @@ export default function SignInPage() {
         </CardHeader>
         <CardContent>
           <div className='flex flex-col items-center gap-4'>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-3'>
-                <FormField
-                  control={form.control}
-                  name='email'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder='Email'
-                          {...field}
-                          type='email'
-                        />
-                      </FormControl>
-                      <FormMessage className='text-xs' />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='password'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className='relative'>
-                          <Button
-                            type='button'
-                            size={'icon'}
-                            variant={'ghost'}
-                            className='absolute right-0 top-1/2 transform -translate-y-1/2'
-                            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                          >
-                            {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
-                          </Button>
-                          <Input
-                            placeholder='Kata'
-                            type={isPasswordVisible ? 'text' : 'password'}
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage className='text-xs' />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type='submit'
-                  className='w-full flex gap-x-2 items-center'
-                >
-                  <LogIn className='w-5 h-5' /> Masuk
-                </Button>
-              </form>
-            </Form>
+            <LoginForm />
             <p className='text-sm'>
-              Belum punya akun? <Link href='/sign-up' className='hover:underline hover:text-leaf transition-colors duration-200 ease-in-out'>Daftar</Link>
+              <span className='mr-1'>Belum punya akun?</span>
+              <Link href='/sign-up'
+                className='hover:underline hover:text-leaf transition-colors duration-200 ease-in-out'>
+                Daftar
+              </Link>
             </p>
             <Separator className='mt-2 w-[80%]' />
             <OAuthSignIn />

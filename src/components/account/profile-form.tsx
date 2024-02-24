@@ -8,6 +8,7 @@ import { Card, CardContent } from '../ui/card'
 import { Label } from '../ui/label'
 import { useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 interface ProfileFormProps {
   user: {
@@ -20,6 +21,8 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ user }: ProfileFormProps) {
+  const { data: session } = useSession()
+
   const { id, name, email, avatar, role } = user;
 
   const [avatarFile, setAvatarFile] = useState<File>();
@@ -79,7 +82,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           </div>
           <div className='flex flex-col gap-y-2 items-center'>
             <p className='text-sm'>{email}</p>
-            {isAdmin && (
+            {session?.user.isAdmin === true && (
               <p className='text-xs'>You login as Admin</p>
             )}
           </div>
@@ -103,7 +106,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             </Button>
           )}
           {
-            isAdmin && (
+            session?.user.isAdmin && (
               <Button
                 variant={'outline'}
                 asChild

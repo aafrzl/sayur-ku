@@ -48,7 +48,6 @@ export default function ProductPage() {
                 gridConfig='grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                 products={productJSON}
               />
-              {/* TODO: ADD Pagination */}
               <CommonPagination
                 page={1}
                 total={10}
