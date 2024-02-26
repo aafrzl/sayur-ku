@@ -14,7 +14,7 @@ interface DesktopNavProps {
 
 export default function DesktopNav({ links }: DesktopNavProps) {
   return (
-    <div className='hidden lg:flex gap-x-8 items-center'>
+    <div className='hidden md:flex gap-x-8 items-center'>
       <LogoNav />
       <NavigationMenu>
         <NavigationMenuList>
@@ -24,7 +24,7 @@ export default function DesktopNav({ links }: DesktopNavProps) {
                 <NavigationMenuLink
                   className={cn(
                     navigationMenuTriggerStyle(),
-                    "font-medium text-sm text-leaf hover:text-carrot transition-colors duration-300 ease-in-out"
+                    "font-semibold text-carrot hover:text-carrot transition-colors duration-300 ease-in-out"
                   )}
                 >
                   {link.title}

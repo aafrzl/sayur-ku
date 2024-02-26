@@ -90,7 +90,7 @@ export default function DetailProductPage({ params }: Props) {
           </Button>
         </div>
         <ProductShowcase
-          gridConfig="grid-cols-2 lg:grid-cols-4"
+          gridConfig="grid-cols-2 md:grid-cols-4"
           products={ProductJSON.slice(0, 4)}
         />
       </div>

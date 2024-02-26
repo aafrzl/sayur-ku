@@ -11,7 +11,7 @@ interface MobileNavProps {
 
 export default function MobileNav({ links }: MobileNavProps) {
   return (
-    <div className='flex lg:hidden'>
+    <div className='flex md:hidden'>
       <Sheet
       >
         <SheetTrigger asChild>

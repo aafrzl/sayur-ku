@@ -45,7 +45,7 @@ export default function ProductPage() {
                 </div>
               </div>
               <ProductShowcase
-                gridConfig='grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                gridConfig='grid-cols-2 md:grid-cols-3 xl:grid-cols-4'
                 products={productJSON}
               />
               <CommonPagination
