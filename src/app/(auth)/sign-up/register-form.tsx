@@ -1,15 +1,19 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { FormField, FormItem, FormControl, FormMessage, Form } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { signUpFormType, signUpFormSchema } from '@/schema/register-schema'
+import { toast } from '@/components/ui/use-toast'
+import { signUpFormSchema, signUpFormType } from '@/schema/register-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { EyeOffIcon, EyeIcon, LogIn } from 'lucide-react'
-import React, { useState } from 'react'
+import axios from 'axios'
+import { EyeIcon, EyeOffIcon, LogIn } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 export default function RegisterForm() {
+  const router = useRouter()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const form = useForm<signUpFormType>({
@@ -17,13 +21,31 @@ export default function RegisterForm() {
   })
 
   const onSubmit = async (data: signUpFormType) => {
+    try {
+      const response = await axios.post('/api/auth/sign-up', data)
+      if (response.status === 200) {
+        toast({
+          title: "Berhasil mendaftar",
+          description: "Silahkan login untuk melanjutkan",
+        })
+
+        form.reset()
+        router.push('/sign-in')
+      }
+    } catch (error) {
+      toast({
+        title: "Gagal mendaftar",
+        description: "Terjadi kesalahan saat mendaftar, silahkan coba lagi nanti",
+        variant: 'destructive'
+      })
+    }
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-3'>
         <FormField
           control={form.control}
-          name='nama'
+          name='name'
           render={({ field }) => (
             <FormItem>
               <FormControl>

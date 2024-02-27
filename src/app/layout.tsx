@@ -5,6 +5,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
 import AuthProviders from '@/components/providers/auth-providers'
+import QueryProvider from '@/components/providers/query-provider'
 
 //TODO: Ganti nama aplikasi ada yang sama hehehe :)
 
@@ -33,10 +34,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(font.className, "text-neutral-800")}>
+      <body
+        suppressHydrationWarning
+        className={cn(font.className, "text-neutral-800")}>
         <AuthProviders>
-          {children}
-          <Toaster />
+          <QueryProvider>
+            {children}
+            <Toaster />
+          </QueryProvider>
         </AuthProviders>
       </body>
     </html>

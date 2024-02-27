@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { createUserSchema } from "@/schema/register-schema";
 import { Prisma, User } from "@prisma/client";
 import bycrypt from "bcrypt";
 import { NextResponse } from "next/server";
@@ -8,7 +9,14 @@ export async function POST(req: Request) {
     const payload = await req.json();
 
     const { name, email, password } = payload;
-    
+
+    const validation = createUserSchema.safeParse(payload);
+
+    if (!validation.success)
+      return NextResponse.json(validation.error.errors, {
+        status: 400,
+      });
+
     const userExists = await prisma.user.findUnique({
       where: {
         email,
@@ -41,7 +49,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       message: "Sign up success",
-      data: dataRes,
+      dataRes,
     });
   } catch (error) {
     return NextResponse.json(

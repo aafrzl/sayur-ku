@@ -8,7 +8,7 @@ import RegisterForm from './register-form'
 export default function SignUpPage() {
   return (
     <div className='mx-auto'>
-      <Card className='max-w-[500px] min-w-[450px] xl:w-[500px]'>
+      <Card className='max-w-[500px] min-w-[350px] xl:w-[500px]'>
         <CardHeader className='items-center'>
           <LogoNav />
           <CardTitle className='text-leaf font-semibold text-lg'>
