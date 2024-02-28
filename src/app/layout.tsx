@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
 import AuthProviders from '@/components/providers/auth-providers'
 import QueryProvider from '@/components/providers/query-provider'
+import { EdgeStoreProvider } from '@/components/providers/edgestore-providers'
 
 //TODO: Ganti nama aplikasi ada yang sama hehehe :)
 
@@ -39,8 +40,10 @@ export default function RootLayout({
         className={cn(font.className, "text-neutral-800")}>
         <AuthProviders>
           <QueryProvider>
-            {children}
-            <Toaster />
+            <EdgeStoreProvider>
+              {children}
+              <Toaster />
+            </EdgeStoreProvider>
           </QueryProvider>
         </AuthProviders>
       </body>

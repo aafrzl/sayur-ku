@@ -5,6 +5,8 @@ import bycrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
+//TODO: Update user profile di database sesuai dengan url dari edgestore (Backendnya belum dibuat)
+
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();

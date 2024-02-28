@@ -16,13 +16,17 @@ import { Card, CardContent } from '../ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Label } from '../ui/label'
 import { toast } from '../ui/use-toast'
+import { useEdgeStore } from '../providers/edgestore-providers'
 
 interface ProfileFormProps {
   user: User
 }
 
+//TODO: Buat component untuk menampilkan progress upload (Bisa pake component dari Shadcn/ui)
+
 export default function ProfileForm({ user }: ProfileFormProps) {
   const router = useRouter()
+  const { edgestore } = useEdgeStore();
   const { name, email, image, isAdmin, password } = user;
 
   const [avatarFile, setAvatarFile] = useState<File>();
@@ -38,7 +42,14 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   const handleSubmit = async (data: ProfileFormType) => {
     if (data.avatar) {
-      console.log('Avatar file', data.avatar);
+      const res = await edgestore.publicFiles.upload({
+        file: data.avatar,
+        onProgressChange: (progress) => {
+          console.log(progress);
+        }
+      })
+
+      console.log(res);
     }
 
     try {
