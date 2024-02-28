@@ -1,14 +1,12 @@
 'use client'
 
-import Image from 'next/image'
-import { ChangeEvent, useState } from 'react'
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Trash } from 'lucide-react'
+import { Input } from '../ui/input'
 
 type uploadImageBanner = z.infer<typeof uploadImageBannerSchema>
 

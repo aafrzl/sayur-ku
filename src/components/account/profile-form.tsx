@@ -2,123 +2,199 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
+import { ProfileFormType, updateProfileSchema } from '@/schema/update-user-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { User } from '@prisma/client'
+import axios from 'axios'
 import { Save, Upload } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import UserAvatar from '../auth/user-avatar'
 import { Card, CardContent } from '../ui/card'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Label } from '../ui/label'
-import { useState } from 'react'
-import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { toast } from '../ui/use-toast'
 
 interface ProfileFormProps {
-  user: {
-    id: number,
-    name: string,
-    email: string,
-    avatar: string,
-    role: string,
-  }
+  user: User
 }
 
 export default function ProfileForm({ user }: ProfileFormProps) {
-  const { data: session } = useSession()
-
-  const { id, name, email, avatar, role } = user;
+  const router = useRouter()
+  const { name, email, image, isAdmin, password } = user;
 
   const [avatarFile, setAvatarFile] = useState<File>();
-  const [userName, setUserName] = useState<string>(name);
+  const [userName, setUserName] = useState<string>(name!);
+  const [passWord, setPassword] = useState<string>(password!);
 
-  const avatarSource = avatarFile ? URL.createObjectURL(avatarFile) : avatar;
-  const showSubmitButton = avatarSource !== avatar || userName !== name;
+  const avatarSource = avatarFile ? URL.createObjectURL(avatarFile) : image;
+  const showSubmitButton = avatarSource !== image || userName !== name || passWord !== password;
 
-  const isAdmin = role === "Admin" ? true : false
+  const form = useForm<ProfileFormType>({
+    resolver: zodResolver(updateProfileSchema),
+  })
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('submit');
+  const handleSubmit = async (data: ProfileFormType) => {
+    if (data.avatar) {
+      console.log('Avatar file', data.avatar);
+    }
+
+    try {
+      const res = await axios.patch('/api/users', data)
+
+      if (res.status === 200) {
+        toast({
+          title: "Success",
+          description: "Profile berhasil diupdate.",
+        })
+      }
+      router.refresh();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Terjadi kesalahan. Silahkan coba lagi nanti.",
+      })
+    }
   }
 
   return (
     <Card className='max-w-lg lg:flex-1 h-fit'>
       <CardContent>
-        <form
-          className='flex flex-col justify-center items-center py-4 gap-4'
-          onSubmit={handleSubmit}
-        >
-          <div className='relative inline-block'>
-            {avatar ? (
-              <UserAvatar
-                user={{
-                  name: name,
-                  image: avatar || null,
-                }}
-                className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-20 h-20 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
-              />
-            ) : (
-              <UserAvatar
-                user={{
-                  name: name || null,
-                  image: `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&size=256&rounded=true&length=1`,
-                }}
-                className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-20 h-20 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
-              />
-            )}
-            <label
-              htmlFor='avatar'
-              className='absolute bottom-0 right-0 bg-leaf text-background rounded-full p-2 cursor-pointer'
-            >
-              <input
-                type='file'
-                id='avatar'
-                hidden
-                accept='image/*'
-                onChange={(e) => {
-                  const { files } = e.target;
-                  if (files && files.length > 0) setAvatarFile(files[0]);
-                }}
-              />
-              <Upload size={16} />
-            </label>
-          </div>
-          <div className='flex flex-col gap-y-2 items-center'>
-            <p className='text-sm'>{email}</p>
-            {session?.user.isAdmin === true && (
-              <p className='text-xs'>You login as Admin</p>
-            )}
-          </div>
-          <div className='w-full'>
-            <Label htmlFor='name'>Nama</Label>
-            <Input
-              id='name'
-              type='text'
-              placeholder='Nama'
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+        <Form {...form}>
+          <form
+            className='flex flex-col justify-center items-center py-4 gap-4'
+            onSubmit={form.handleSubmit(handleSubmit)}
+          >
+            <FormField
+              control={form.control}
+              name='avatar'
+              render={({ field }) => (
+                <>
+                  <FormItem className='relative inline-block'>
+                    {image ? (
+                      <UserAvatar
+                        user={{
+                          name: name,
+                          image: avatarSource,
+                        }}
+                        className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-20 h-20 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
+                      />
+                    ) : (
+                      <UserAvatar
+                        user={{
+                          name: name,
+                          image: `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&size=256&rounded=true&length=1`,
+                        }}
+                        className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-20 h-20 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
+                      />
+                    )}
+                    <FormControl>
+                      <FormLabel
+                        htmlFor='avatar'
+                        className='absolute bottom-0 right-0 bg-leaf text-background rounded-full p-2 cursor-pointer'
+                      >
+                        <input
+                          type='file'
+                          id='avatar'
+                          hidden
+                          accept='image/*'
+                          onChange={(e) => {
+                            const { files } = e.target;
+                            if (files && files[0]) {
+                              setAvatarFile(files[0]);
+                              field.onChange(files[0]);
+                            }
+                          }}
+                        />
+                        <Upload size={16} />
+                      </FormLabel>
+                    </FormControl>
+                  </FormItem>
+                  <FormMessage />
+                  <div className='flex flex-col gap-y-2 items-center'>
+                    <p className='text-sm'>{email}</p>
+                    {isAdmin === true && (
+                      <p className='text-xs'>You login as Admin</p>
+                    )}
+                  </div>
+                </>
+              )}
             />
-          </div>
-          {showSubmitButton && (
-            <Button
-              type='submit'
-              size='lg'
-              className='w-full'
-            >
-              <Save className='mr-2 w-5 h5' /> Update
-            </Button>
-          )}
-          {
-            session?.user.isAdmin && (
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormControl className='w-full'>
+                  <FormItem>
+                    <Label htmlFor='name'>Nama</Label>
+                    <Input
+                      id='name'
+                      type='text'
+                      placeholder='Nama'
+                      value={userName}
+                      onChange={(e) => {
+                        setUserName(e.target.value);
+                        field.onChange(e);
+                      }}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                </FormControl>
+              )}
+            />
+            {password === null && (
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormControl className='w-full'>
+                    <FormItem>
+                      <Label htmlFor='password'>
+                        Isikan password anda
+                      </Label>
+                      <Input
+                        id='password'
+                        type='password'
+                        placeholder='Password...'
+                        value={passWord}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          field.onChange(e);
+                        }}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  </FormControl>
+                )}
+              />
+            )}
+            {showSubmitButton && (
               <Button
-                variant={'outline'}
-                asChild
+                type='submit'
+                size='lg'
                 className='w-full'
+                disabled={form.formState.isSubmitting}
               >
-                <Link href={'/dashboard'}>
-                  Go to dashboard Admin
-                </Link>
+                <Save className='mr-2 w-5 h5' /> Update
               </Button>
-            )
-          }
-        </form>
+            )}
+            {
+              isAdmin && (
+                <Button
+                  variant={'outline'}
+                  asChild
+                  className='w-full'
+                >
+                  <Link href={'/dashboard'}>
+                    Go to dashboard Admin
+                  </Link>
+                </Button>
+              )
+            }
+          </form>
+        </Form>
       </CardContent>
     </Card>
   )

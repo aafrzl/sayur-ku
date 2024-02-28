@@ -1,18 +1,18 @@
-'use client'
-
 import ProfileForm from "@/components/account/profile-form";
 import ProfileHistory from "@/components/account/profile-history";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import prisma from "@/lib/db";
+import { User } from "@prisma/client";
 
-const UserProfile = {
-  id: 1,
-  name: 'Shadcn',
-  email: 'shadcn@email.com',
-  avatar: 'https://github.com/shadcn.png',
-  role: 'Admin'
-}
+export default async function AccoutPage() {
+  const session = await getServerSession(authOptions)
 
-export default function AccoutPage() {
-
+  const getUserData = await prisma.user.findUnique({
+    where: {
+      email: session?.user.email
+    }
+  })
 
   return (
     <main className='flex min-h-screen w-full flex-col py-14 container mx-auto gap-4'>
@@ -26,9 +26,8 @@ export default function AccoutPage() {
       </div>
       <div className="flex flex-col lg:flex-row gap-8">
         <ProfileForm
-          user={UserProfile}
+          user={getUserData as User}
         />
-
         <ProfileHistory />
       </div>
     </main>

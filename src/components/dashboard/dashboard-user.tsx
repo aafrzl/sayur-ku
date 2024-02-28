@@ -12,14 +12,12 @@ interface Props {
 }
 
 export default function DashboardUser({ session }: Props) {
-  const { name, image } = session
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger >
         <UserAvatar user={{
-          name: name || null,
-          image: image || null,
+          name: session?.name || null,
+          image: session?.image || null,
         }}
           className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-10 h-10 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
         />
