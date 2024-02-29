@@ -1,11 +1,41 @@
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 
-import { Search } from "lucide-react"
-import TableUsers from "./table-users"
+import prisma from "@/lib/db";
+import { Search } from "lucide-react";
+import TableUsers from "./table-users";
+import { User } from "next-auth";
+import { redirect } from "next/navigation";
+import SearchUser from "./search-users";
+import CommonPagination from "@/components/common/common-pagination";
 
+interface Props {
+  searchParams: {
+    query: string;
+    page: string;
+  }
+}
 
-export default function DashboardUsersPage() {
-  
+export default async function DashboardUsersPage({ searchParams }: Props) {
+  const where = {
+    name: {
+      contains: searchParams.query,
+    },
+  }
+
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
+  const users = await prisma.user.findMany({
+    where,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  })
 
   return (
     <div className='container mx-auto py-14 flex flex-col'>
@@ -13,11 +43,15 @@ export default function DashboardUsersPage() {
       <p className="text-sm text-gray-500">
         A table of users will be displayed here.
       </p>
-      <div className="relative max-w-md">
-        <Search className="absolute top-6 left-3 w-6 h-6 text-gray-400" />
-        <Input type="text" placeholder="Search users" className="mt-4 pl-10" />
-      </div>
-      <TableUsers />
+      <SearchUser />
+      <TableUsers
+        users={users as []}
+      />
+      <CommonPagination
+        itemCount={page}
+        pageSize={pageSize}
+        currentPage={parseInt(searchParams.page)}
+      />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Pagination,
   PaginationContent,
@@ -7,64 +9,58 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { useSearchParams } from "next/navigation";
 
 import React from 'react'
 
 interface Props {
-  page: number;
-  total?: number;
+  itemCount: number;
+  pageSize: number;
+  currentPage: number;
 }
 
-export default function CommonPagination({ page, total }: Props): JSX.Element {
-  const totalPage = total || 1
+export default function CommonPagination({ itemCount, pageSize, currentPage }: Props) {
+  const searchParams = useSearchParams();
 
-  const generatePageLink = (page: number) => {
-    return `?page=${page}`
+  const totalPages = Math.ceil(itemCount / pageSize);
+  if (totalPages === 1) return null;
+
+  const changePage = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString())
+    return `?${params.toString()}`
   }
 
   return (
     <Pagination className="mt-10">
-      <PaginationContent>
+      {currentPage > 1 && (
         <PaginationPrevious
-          href={generatePageLink(page - 1)}
+          href={changePage(currentPage - 1)}
+          isActive={currentPage === 1}
+        />
+      )}
+      {totalPages > 7 && currentPage > 4 && (
+        <PaginationEllipsis />
+      )}
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <PaginationLink
+          key={page}
+          href={changePage(page)}
+          isActive={currentPage === page}
         >
-          Sebelumnya
-        </PaginationPrevious>
-        {page > 1 && (
-          <PaginationItem>
-            <PaginationLink href={generatePageLink(1)}>1</PaginationLink>
-          </PaginationItem>
-        )}
-        {page > 2 && (
-          <PaginationEllipsis />
-        )}
-        {page > 2 && (
-          <PaginationItem>
-            <PaginationLink href={generatePageLink(page - 1)}>{page - 1}</PaginationLink>
-          </PaginationItem>
-        )}
-        <PaginationItem>
-          <PaginationLink href={generatePageLink(page)}>{page}</PaginationLink>
-        </PaginationItem>
-        {page < totalPage - 1 && (
-          <PaginationItem>
-            <PaginationLink href={generatePageLink(page + 1)}>{page + 1}</PaginationLink>
-          </PaginationItem>
-        )}
-        {page < totalPage - 2 && (
-          <PaginationEllipsis />
-        )}
-        {page < totalPage && (
-          <PaginationItem>
-            <PaginationLink href={generatePageLink(totalPage)}>{totalPage}</PaginationLink>
-          </PaginationItem>
-        )}
+          {page}
+        </PaginationLink>
+      ))}
+
+      {totalPages > 7 && currentPage < totalPages - 3 && (
+        <PaginationEllipsis />
+      )}
+      {currentPage < totalPages && (
         <PaginationNext
-          href={generatePageLink(page + 1)}
-        >
-          Selanjutnya
-        </PaginationNext>
-      </PaginationContent>
+          href={changePage(currentPage + 1)}
+          isActive={currentPage === totalPages}
+        />
+      )}
     </Pagination>
   )
 }
