@@ -5,13 +5,45 @@ import bycrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-//TODO: Update user profile di database sesuai dengan url dari edgestore (Backendnya belum dibuat)
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  try {
+    if (!session)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session?.user.id,
+      },
+      select: {
+        name: true,
+        email: true,
+        image: true,
+      },
+    });
+
+    if (!user)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    return NextResponse.json({
+      user,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Telah terjadi kesalahan. Silahkan coba lagi nanti.",
+      },
+      { status: 500 }
+    );
+  }
+}
 
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   const body = await req.json();
 
-  const { name, password } = body;
+  const { name, password, image } = body;
 
   try {
     if (!session)
@@ -28,6 +60,7 @@ export async function PATCH(req: Request) {
 
     const data = {
       name,
+      image,
       password: password ? bycrypt.hashSync(password, 10) : undefined,
     };
 
@@ -48,7 +81,6 @@ export async function PATCH(req: Request) {
       dataRes,
     });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       {
         error: "Telah terjadi kesalahan. Silahkan coba lagi nanti.",

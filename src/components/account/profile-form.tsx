@@ -17,12 +17,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Label } from '../ui/label'
 import { toast } from '../ui/use-toast'
 import { useEdgeStore } from '../providers/edgestore-providers'
+import { Progress } from '../ui/progress'
 
 interface ProfileFormProps {
   user: User
 }
-
-//TODO: Buat component untuk menampilkan progress upload (Bisa pake component dari Shadcn/ui)
 
 export default function ProfileForm({ user }: ProfileFormProps) {
   const router = useRouter()
@@ -32,6 +31,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   const [avatarFile, setAvatarFile] = useState<File>();
   const [userName, setUserName] = useState<string>(name!);
   const [passWord, setPassword] = useState<string>(password!);
+  const [progress, setProgress] = useState<number>(0);
 
   const avatarSource = avatarFile ? URL.createObjectURL(avatarFile) : image;
   const showSubmitButton = avatarSource !== image || userName !== name || passWord !== password;
@@ -41,18 +41,24 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   })
 
   const handleSubmit = async (data: ProfileFormType) => {
-    if (data.avatar) {
-      const res = await edgestore.publicFiles.upload({
-        file: data.avatar,
-        onProgressChange: (progress) => {
-          console.log(progress);
-        }
-      })
-
-      console.log(res);
-    }
-
     try {
+      if (data.avatar) {
+        const res = await edgestore.publicFiles.upload({
+          file: data.avatar,
+          onProgressChange: async (progress) => {
+            setProgress(progress);
+
+            if (progress === 100) {
+              setProgress(0);
+            }
+          }
+        })
+
+        await axios.patch('/api/users', {
+          image: res.url,
+        })
+      }
+
       const res = await axios.patch('/api/users', data)
 
       if (res.status === 200) {
@@ -63,6 +69,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       }
       router.refresh();
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Terjadi kesalahan. Silahkan coba lagi nanti.",
@@ -130,6 +137,16 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                       <p className='text-xs'>You login as Admin</p>
                     )}
                   </div>
+                  {progress > 0 && (
+                    <div className='inline-block gap-x-2 items-center w-full'>
+                      <Progress
+                        value={progress}
+                      />
+                      <p className='text-sm'>
+                        {progress}%
+                      </p>
+                    </div>
+                  )}
                 </>
               )}
             />

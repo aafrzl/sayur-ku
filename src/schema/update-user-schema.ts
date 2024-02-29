@@ -10,9 +10,9 @@ export const updateProfileSchema = z.object({
     .refine(
       (file) =>
         !file || (file instanceof File && file.type.startsWith("image/")),
-      "Foto banner harus berupa gambar"
+      "Foto profile harus berupa gambar"
     )
     .refine((file) => {
       return !file || file.size < 1024 * 1024 * 2;
-    }, "Foto banner tidak boleh lebih dari 2MB"),
+    }, "Foto profile tidak boleh lebih dari 2MB"),
 });

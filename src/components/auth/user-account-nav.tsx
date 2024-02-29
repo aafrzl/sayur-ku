@@ -5,16 +5,30 @@ import Link from 'next/link'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import UserAvatar from './user-avatar'
 import { signOut, useSession } from 'next-auth/react'
+import { useQuery } from '@tanstack/react-query'
+import { User } from 'next-auth'
+import axios from 'axios'
+import { Skeleton } from '../ui/skeleton'
 
 export default function UserAccountNav() {
   const { data: session } = useSession()
+
+  const { data: users, error, isLoading } = useQuery<User>({
+    queryKey: ["user"],
+    queryFn: async () => await axios.get('/api/users').then(res => res.data.user),
+    staleTime: 60 * 1000, // 1 minute
+  })
+
+  if (isLoading) return <Skeleton className='w-28 h-10 rounded-xl' />
+
+  if (error) return null
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none'>
         <UserAvatar user={{
-          image: session?.user?.image,
-          name: session?.user?.name
+          image: users?.image || null,
+          name: users?.name || null,
         }}
           className='ring-2 ring-from-leaf ring-offset-2 ring-offset-background rounded-full w-10 h-10 overflow-hidden bg-background hover:ring-leaf transition-all duration-300 ease-in-out cursor-pointer'
         />
@@ -25,7 +39,7 @@ export default function UserAccountNav() {
           <div className='flex flex-col space-y-1 leading-none'>
             <p className='text-sm font-medium'>{session?.user.name}</p>
             <p className='w-[200px] truncate text-xs text-muted-foreground'>
-              {session?.user?.email}
+              {users?.email}
             </p>
           </div>
         </div>
