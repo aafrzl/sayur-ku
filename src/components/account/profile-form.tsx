@@ -54,12 +54,12 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           }
         })
 
-        await axios.patch('/api/users', {
+        await axios.patch('/api/account', {
           image: res.url,
         })
       }
 
-      const res = await axios.patch('/api/users', data)
+      const res = await axios.patch('/api/account', data)
 
       if (res.status === 200) {
         toast({

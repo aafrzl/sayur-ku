@@ -15,7 +15,7 @@ export default function UserAccountNav() {
 
   const { data: users, error, isLoading } = useQuery<User>({
     queryKey: ["user"],
-    queryFn: async () => await axios.get('/api/users').then(res => res.data.user),
+    queryFn: async () => await axios.get('/api/account').then(res => res.data.user),
     staleTime: 60 * 1000, // 1 minute
   })
 
