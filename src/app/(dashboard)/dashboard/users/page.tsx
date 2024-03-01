@@ -1,32 +1,28 @@
-import { Input } from "@/components/ui/input";
 
-import prisma from "@/lib/db";
-import { Search } from "lucide-react";
-import TableUsers from "./table-users";
-import { User } from "next-auth";
-import { redirect } from "next/navigation";
-import SearchUser from "./search-users";
 import CommonPagination from "@/components/common/common-pagination";
+import prisma from "@/lib/db";
+import SearchUser from "./search-users";
+import TableUsers from "./table-users";
+
+type searchParams = {
+  query: string;
+  page: string;
+}
 
 interface Props {
-  searchParams: {
-    query: string;
-    page: string;
-  }
+  searchParams: searchParams;
 }
 
 export default async function DashboardUsersPage({ searchParams }: Props) {
-  const where = {
-    name: {
-      contains: searchParams.query,
-    },
-  }
-
   const page = parseInt(searchParams.page) || 1;
   const pageSize = 10;
 
   const users = await prisma.user.findMany({
-    where,
+    where: {
+      name: {
+        contains: searchParams.query,
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -35,6 +31,14 @@ export default async function DashboardUsersPage({ searchParams }: Props) {
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
+  })
+
+  const usersCount = await prisma.user.count({
+    where: {
+      name: {
+        contains: searchParams.query,
+      },
+    },
   })
 
   return (
@@ -48,7 +52,7 @@ export default async function DashboardUsersPage({ searchParams }: Props) {
         users={users as []}
       />
       <CommonPagination
-        itemCount={page}
+        itemCount={usersCount}
         pageSize={pageSize}
         currentPage={parseInt(searchParams.page)}
       />
