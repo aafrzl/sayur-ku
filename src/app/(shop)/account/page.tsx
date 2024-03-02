@@ -4,15 +4,23 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import prisma from "@/lib/db";
 import { User } from "@prisma/client";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+import ProfileAddress from "@/components/account/profile-address";
 
 export default async function AccoutPage() {
   const session = await getServerSession(authOptions)
 
   const getUserData = await prisma.user.findUnique({
     where: {
-      email: session?.user.email
+      email: session?.user?.email as string
+    },
+    include: {
+      ShippingAddress: true
     }
   })
+
+  const address = getUserData?.ShippingAddress || []
 
   return (
     <main className='flex min-h-screen w-full flex-col py-14 container mx-auto gap-4'>
@@ -25,9 +33,17 @@ export default async function AccoutPage() {
         </p>
       </div>
       <div className="flex flex-col lg:flex-row gap-8">
-        <ProfileForm
-          user={getUserData as User}
-        />
+        <Card className='max-w-lg lg:flex-1 h-fit'>
+          <CardContent>
+            <ProfileForm
+              user={getUserData as User}
+            />
+            <Separator className="my-5" />
+            <ProfileAddress
+              Alamat={address}
+            />
+          </CardContent>
+        </Card>
         <ProfileHistory />
       </div>
     </main>

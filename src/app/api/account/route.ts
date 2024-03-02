@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db";
+import { updateProfileAddressSchema } from "@/schema/update-user-schema";
 import { User } from "@prisma/client";
 import bycrypt from "bcrypt";
 import { getServerSession } from "next-auth";
@@ -79,6 +80,69 @@ export async function PATCH(req: Request) {
     return NextResponse.json({
       message: "User updated",
       dataRes,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Telah terjadi kesalahan. Silahkan coba lagi nanti.",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// namaPenerima: 'test',
+// telepon: '123123',
+// alamat: 'Jln. Terusan Suryani No.212/191C RT03/RW06',
+// kota: 'KAB. BANGKA TENGAH',
+// provinsi: 'KEPULAUAN BANGKA BELITUNG',
+// kecamatan: 'Pangkalan Baru',
+// kelurahan: 'Air Mesu'
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+
+    const {
+      namaPenerima,
+      telepon,
+      alamat,
+      kota,
+      provinsi,
+      kecamatan,
+      kelurahan,
+    } = body;
+
+    const session = await getServerSession(authOptions);
+
+    if (!session)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const validation = updateProfileAddressSchema.safeParse(body);
+
+    if (!validation.success)
+      return NextResponse.json(validation.error.format(), { status: 400 });
+
+    const address = await prisma.shippingAddress.create({
+      data: {
+        namaPenerima,
+        telepon,
+        alamat,
+        kota,
+        provinsi,
+        kecamatan,
+        kelurahan,
+        user: {
+          connect: {
+            id: session.user.id,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json({
+      message: "User updated",
+      address,
     });
   } catch (error) {
     return NextResponse.json(

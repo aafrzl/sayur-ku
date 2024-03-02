@@ -32,7 +32,7 @@ export default function MobileNav({ links }: MobileNavProps) {
               links.map((link, index) => (
                 <Button
                   asChild
-                  variant={'link'}
+                  variant={'ghost'}
                   key={index}
                   className='text-lg transition-all duration-200 ease-in-out hover:text-leaf hover:underline-offset-2'
                 >

@@ -1,23 +1,21 @@
 'use client'
 
+import { getDataUser } from '@/hooks/getData'
 import { HeartIcon, LogOut, ShoppingBag, UserIcon } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import UserAvatar from './user-avatar'
-import { signOut, useSession } from 'next-auth/react'
-import { useQuery } from '@tanstack/react-query'
-import { User } from 'next-auth'
-import axios from 'axios'
 import { Skeleton } from '../ui/skeleton'
+import UserAvatar from './user-avatar'
 
 export default function UserAccountNav() {
   const { data: session } = useSession()
 
-  const { data: users, error, isLoading } = useQuery<User>({
-    queryKey: ["user"],
-    queryFn: async () => await axios.get('/api/account').then(res => res.data.user),
-    staleTime: 60 * 1000, // 1 minute
-  })
+  const {
+    users,
+    error,
+    isLoading,
+  } = getDataUser()
 
   if (isLoading) return <Skeleton className='w-28 h-10 rounded-xl' />
 

@@ -20,8 +20,8 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "files.edgestore.dev"
-      }
+        hostname: "files.edgestore.dev",
+      },
     ],
   },
 };
