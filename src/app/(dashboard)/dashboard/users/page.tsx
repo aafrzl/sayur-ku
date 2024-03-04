@@ -1,7 +1,7 @@
 
-import CommonPagination from "@/components/common/common-pagination";
 import prisma from "@/lib/db";
-import SearchUser from "./search-users";
+import { User } from "@prisma/client";
+import { columnsUserTable } from "./columns-user-table";
 import TableUsers from "./table-users";
 
 type searchParams = {
@@ -14,9 +14,6 @@ interface Props {
 }
 
 export default async function DashboardUsersPage({ searchParams }: Props) {
-  const page = parseInt(searchParams.page) || 1;
-  const pageSize = 10;
-
   const users = await prisma.user.findMany({
     where: {
       name: {
@@ -27,17 +24,6 @@ export default async function DashboardUsersPage({ searchParams }: Props) {
       id: true,
       name: true,
       email: true,
-      image: true,
-    },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-  })
-
-  const usersCount = await prisma.user.count({
-    where: {
-      name: {
-        contains: searchParams.query,
-      },
     },
   })
 
@@ -47,14 +33,9 @@ export default async function DashboardUsersPage({ searchParams }: Props) {
       <p className="text-sm text-gray-500">
         A table of users will be displayed here.
       </p>
-      <SearchUser />
       <TableUsers
-        users={users as []}
-      />
-      <CommonPagination
-        itemCount={usersCount}
-        pageSize={pageSize}
-        currentPage={parseInt(searchParams.page)}
+        columns={columnsUserTable}
+        data={users as User[]}
       />
     </div>
   )

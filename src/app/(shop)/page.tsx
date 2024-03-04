@@ -9,7 +9,6 @@ import productJSON from "@/lib/data/json/product.json";
 import { ProductCategoryJSON } from "@/lib/data/productCategory";
 
 export default function Home() {
-
   return (
     <main className="flex w-full items-center justify-between py-4">
       <div className="container m-auto flex flex-col">

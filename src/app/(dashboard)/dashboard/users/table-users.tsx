@@ -1,7 +1,8 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { DataTablePagination } from "@/components/tables/data-table-pagination"
+import DataTableSearch from "@/components/tables/data-table-search"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -10,112 +11,87 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { User } from "@prisma/client"
-import { Trash2 } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { toast } from "@/components/ui/use-toast"
-import axios from "axios"
-import { useRouter } from "next/navigation"
+import { ColumnDef, ColumnFilter, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table"
+import { useState } from "react"
 
-interface Props {
-  users: User[]
+interface Props<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
 }
 
-export default function TableUsers({ users }: Props) {
-  // if email is same with session email, disable delete button
-  const { data: session } = useSession()
-  const router = useRouter()
+export default function TableUsers<TData, TValue>({
+  columns,
+  data
+}: Props<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  const isUser = (email: string) => {
-    if (session?.user?.email === email) return true
-  }
-
-  const deleteUser = async (id: string) => {
-    try {
-      await axios.delete("/api/users/" + id)
-      router.refresh()
-      toast({
-        title: "Success",
-        description: "User has been deleted.",
-      })
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Server error. Please try again later.",
-        variant: "destructive",
-      })
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters
     }
-  }
+  })
 
   return (
     <Card className="mt-8">
+      <CardHeader>
+        <DataTableSearch
+          table={table}
+          textPlaceholder="Search users..."
+        />
+      </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          {users.length === 0 && (
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={3} className="text-center">
-                  No users found
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          )}
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  {!isUser(user.email!) && (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          size={'icon'}
-                          variant={'destructive'}
-                        >
-                          <Trash2 size={16} />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the user.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => deleteUser(user.id)}
-                          >Continue</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
-                </TableCell>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
             ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
+      <CardFooter>
+        <DataTablePagination table={table} />
+      </CardFooter>
     </Card>
   )
 }

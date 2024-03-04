@@ -4,7 +4,7 @@ import PlaygroundPages from '@/components/dashboard/dashboard-playground-pages'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { dataDashboardOrders, dataPlaygroundPages } from '@/lib/data/dashboardData'
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return (
     <div className='flex flex-col items-center min-h-screen gap-4 py-14'>
       <h3 className='text-3xl font-bold text-leaf self-start'>

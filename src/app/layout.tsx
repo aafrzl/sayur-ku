@@ -8,8 +8,6 @@ import AuthProviders from '@/components/providers/auth-providers'
 import QueryProvider from '@/components/providers/query-provider'
 import { EdgeStoreProvider } from '@/components/providers/edgestore-providers'
 
-//TODO: Ganti nama aplikasi ada yang sama hehehe :)
-
 const font = Poppins({
   subsets: ['latin'],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]

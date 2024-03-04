@@ -25,7 +25,7 @@ export default function DashboardSidebar() {
       )}
     >
       <ArrowRight
-        className={cn("absolute -right-3 top-20 cursor-pointer rounded-full border bg-background text-foreground w-8 h-8 ransition-all duration-300 ease-in-out",
+        className={cn("absolute -right-3 top-20 cursor-pointer rounded-full border bg-background text-foreground w-8 h-8 transition-all duration-300 ease-in-out",
           isOpen && "rotate-180"
         )}
         onClick={handleToggle}
