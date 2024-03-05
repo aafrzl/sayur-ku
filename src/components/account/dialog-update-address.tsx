@@ -29,8 +29,9 @@ import { Input } from '../ui/input';
 import { AutosizeTextarea } from '../ui/textarea';
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import { ShippingAddress } from "@prisma/client";
 
-export default function DialogFormAddress() {
+export default function DialogUpdateAddress({ address }: { address: ShippingAddress }) {
   const router = useRouter()
 
   const [provinsiId, setProvinsiId] = useState("")
@@ -45,11 +46,20 @@ export default function DialogFormAddress() {
 
   const form = useForm<ProfileFormAdressType>({
     resolver: zodResolver(updateProfileAddressSchema),
+    defaultValues: {
+      namaPenerima: address.namaPenerima,
+      telepon: address.telepon,
+      alamat: address.alamat,
+      provinsi: address.provinsi,
+      kota: address.kota,
+      kecamatan: address.kecamatan,
+      kelurahan: address.kelurahan
+    }
   })
 
   const onSubmit = async (data: ProfileFormAdressType) => {
     try {
-      const res = await axios.post('/api/account', data);
+      const res = await axios.patch('/api/account/' + address.id, data);
       if (res.status === 200) {
         toast({
           title: 'Berhasil',
@@ -84,17 +94,18 @@ export default function DialogFormAddress() {
         <Button
           variant="outline"
           onClick={() => setOpen(true)}
+          size={'sm'}
         >
-          Tambah Alamat
+          Edit Alamat
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[400px] md:w-full">
         <DialogHeader>
           <DialogTitle>
-            Tambah Alamat
+            Edit Alamat
           </DialogTitle>
           <DialogDescription>
-            Tambahkan alamat pengiriman baru untuk mempermudah proses checkout
+            Ubah alamat pengiriman
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -113,6 +124,7 @@ export default function DialogFormAddress() {
                       type='text'
                       placeholder='Masukkan nama penerima'
                       {...field}
+                      defaultValue={field.value}
                     />
                   </FormControl>
                   <FormMessage />
@@ -131,6 +143,7 @@ export default function DialogFormAddress() {
                       type='text'
                       placeholder='Masukkan nomor telepon'
                       {...field}
+                      defaultValue={field.value}
                     />
                   </FormControl>
                   <FormMessage />
@@ -148,6 +161,7 @@ export default function DialogFormAddress() {
                       id='alamat'
                       placeholder='Alamat lengkap pengiriman'
                       {...field}
+                      defaultValue={field.value}
                     />
                   </FormControl>
                   <FormMessage />
@@ -163,6 +177,7 @@ export default function DialogFormAddress() {
                   <FormControl>
                     <Select
                       {...field}
+                      defaultValue={field.value}
                       onValueChange={(value) => {
                         setProvinsiId(provinsi?.value.find((prov) => prov.name === value)?.id || "")
                         field.onChange(value)
@@ -199,6 +214,7 @@ export default function DialogFormAddress() {
                     <FormControl>
                       <Select
                         {...field}
+                        defaultValue={field.value}
                         onValueChange={(value) => {
                           setKotaId(dataKota?.value.find((kota) => kota.name === value)?.id || "")
                           field.onChange(value)
@@ -236,6 +252,7 @@ export default function DialogFormAddress() {
                     <FormControl>
                       <Select
                         {...field}
+                        defaultValue={field.value}
                         onValueChange={(value) => {
                           setKecamatanId(kecamatan?.value.find((kec) => kec.name === value)?.id || "")
                           field.onChange(value)
@@ -273,6 +290,7 @@ export default function DialogFormAddress() {
                     <FormControl>
                       <Select
                         {...field}
+                        defaultValue={field.value}
                         onValueChange={field.onChange}
                       >
                         <FormControl>
@@ -301,7 +319,7 @@ export default function DialogFormAddress() {
               type='submit'
               className='w-full'
             >
-              Simpan Alamat
+              Update Alamat
             </Button>
           </form>
         </Form >

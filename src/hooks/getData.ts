@@ -35,7 +35,7 @@ export const getDataProvinsi = () => {
 
 export const getDataKota = (provinsiId: string) => {
   const { data: dataKota } = useQuery<Kota>({
-    queryKey: ["kota"],
+    queryKey: ["kota", provinsiId],
     queryFn: async () =>
       await axios
         .get<Kota>(

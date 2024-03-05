@@ -91,14 +91,6 @@ export async function PATCH(req: Request) {
   }
 }
 
-// namaPenerima: 'test',
-// telepon: '123123',
-// alamat: 'Jln. Terusan Suryani No.212/191C RT03/RW06',
-// kota: 'KAB. BANGKA TENGAH',
-// provinsi: 'KEPULAUAN BANGKA BELITUNG',
-// kecamatan: 'Pangkalan Baru',
-// kelurahan: 'Air Mesu'
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();

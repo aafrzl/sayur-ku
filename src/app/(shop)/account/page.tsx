@@ -40,7 +40,7 @@ export default async function AccoutPage() {
             />
             <Separator className="my-5" />
             <ProfileAddress
-              Alamat={address}
+              ShippingAddress={address}
             />
           </CardContent>
         </Card>

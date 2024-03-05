@@ -1,32 +1,41 @@
 'use client'
 
 import { ShippingAddress } from '@prisma/client'
+import DialogDeleteAddress from './dialog-delete-address'
 import DialogFormAddress from './dialog-form-address'
+import DialogUpdateAddress from './dialog-update-address'
 
-//TODO: Buat komponen untuk menampilkan daftar alamat pengiriman user
-//TODO: Buat fungsi untuk mengubah value alamat pengiriman menjadi alamat utama
+export default function ProfileAddress({ ShippingAddress }: { ShippingAddress: ShippingAddress[] }) {
 
-export default function ProfileAddress({ Alamat }: { Alamat: ShippingAddress[] }) {
   return (
     <div className='flex flex-col gap-8'>
       <h3 className='font-semibold text-center md:text-start'>
-        Tambahkan Alamat pengiriman
+        Daftar Alamat Pengiriman
       </h3>
       <DialogFormAddress />
-      {Alamat.map((address) => (
-        <div key={address.id} className='flex flex-col gap-2'>
-          <p className='text-leaf font-semibold'>
-            {address.namaPenerima}
-          </p>
-          <p className='text-muted-foreground'>
-            {address.alamat}
-          </p>
-          <p className='text-muted-foreground'>
-            {address.kota}, {address.provinsi}
-          </p>
-          <p className='text-muted-foreground'>
-            {address.telepon}
-          </p>
+      {ShippingAddress.map((address) => (
+        <div
+          key={address.id}
+          className='flex flex-col border px-4 py-2 rounded-md gap-4'>
+          <div className='flex flex-col items-start'>
+            <p className='font-semibold'>
+              {address.namaPenerima}
+            </p>
+            <p>
+              {address.alamat}
+            </p>
+            <p className='text-sm'>
+              {address.provinsi}, {address.kota}, {address.kelurahan}, {address.kecamatan}
+            </p>
+          </div>
+          <div className='flex gap-x-2'>
+            <DialogUpdateAddress
+              address={address}
+            />
+            <DialogDeleteAddress
+              id={address.id}
+            />
+          </div>
         </div>
       ))}
     </div>
