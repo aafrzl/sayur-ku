@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-export type ProfileFormType = z.infer<typeof updateProfileSchema>;
-export type ProfileFormAdressType = z.infer<typeof updateProfileAddressSchema>;
-
 export const updateProfileSchema = z.object({
   name: z.string().min(1, "Nama tidak boleh kosong").optional(),
   password: z.string().min(6, "Password minimal 6 karakter").optional(),
@@ -36,3 +33,6 @@ export const updateProfileAddressSchema = z.object({
   kecamatan: z.string().min(1, "Kecamatan tidak boleh kosong"),
   kelurahan: z.string().min(1, "Kelurahan tidak boleh kosong"),
 });
+
+export type ProfileFormType = z.infer<typeof updateProfileSchema>;
+export type ProfileFormAdressType = z.infer<typeof updateProfileAddressSchema>;

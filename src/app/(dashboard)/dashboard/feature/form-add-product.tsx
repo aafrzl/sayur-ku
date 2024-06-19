@@ -1,15 +1,14 @@
-'use client'
+"use client";
 
-import { Input } from '@/components/ui/input'
-import { Button } from "@/components/ui/button"
-import { z } from "zod"
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from "react"
-import Image from "next/image"
-import { X } from "lucide-react"
-import { ProductCategoryJSON } from "@/lib/data/productCategory"
+import { useState } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { ProductCategoryJSON } from "@/lib/data/productCategory";
 
 import {
   Form,
@@ -18,7 +17,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 
 import {
   Select,
@@ -26,48 +25,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { AutosizeTextarea } from '@/components/ui/textarea'
-
-type Product = z.infer<typeof productSchema>
-
-const productSchema = z.object({
-  title: z.string().min(1, { message: "Nama produk tidak boleh kosong" }).max(50, { message: "Nama produk tidak boleh lebih dari 50 karakter" }),
-  price: z.string().min(1, { message: "Harga tidak boleh kosong" }).regex(/^\d+$/, 'Must be a number'),
-  stock: z.string().min(1, { message: "Stok tidak boleh kosong" }).regex(/^\d+$/, 'Must be a number').max(10, { message: "Stok tidak boleh lebih dari 10 digit" }),
-  description: z.string().min(1, { message: "Deskripsi produk tidak boleh kosong" }).max(500, { message: "Deskripsi produk tidak boleh lebih dari 500 karakter" }),
-  image:
-    z.custom<File | undefined>()
-      .refine(
-        (file) => file instanceof File, 'Foto produk harus diisi'
-      )
-      .refine(
-        (file) => !file || (file instanceof File && file.type.startsWith('image/')),
-        'Foto produk harus berupa gambar'
-      )
-      .refine((file) => {
-        return !file || file.size < 1024 * 1024 * 2;
-      }, 'Foto produk tidak boleh lebih dari 2MB'),
-  category: z.string().min(1, { message: "Kategori produk harus dipilih" }),
-  unit: z.string().min(1, { message: "Satuan produk harus dipilih" }),
-})
+} from "@/components/ui/select";
+import { AutosizeTextarea } from "@/components/ui/textarea";
+import { Product, productSchema } from "@/schema/product-schema";
 
 export default function FormAddProduct() {
-  const [images, setImages] = useState<File | undefined>(undefined)
+  const [images, setImages] = useState<File | undefined>(undefined);
 
   const form = useForm<Product>({
     resolver: zodResolver(productSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      image: undefined,
-      category: "",
-      unit: "",
-    },
-  })
+  });
 
   const onSubmit = (value: Product) => {
-    console.log(value)
+    console.log(value);
 
     // reset form
     form.reset({
@@ -76,21 +46,31 @@ export default function FormAddProduct() {
       image: undefined,
       category: "",
       unit: "",
-    })
-    setImages(undefined)
-  }
+      price: "",
+      stock: "",
+    });
+    setImages(undefined);
+
+    // redirect("/dashboard/products");
+  };
 
   return (
     <Form {...form}>
       <form
-        className='my-4 space-y-4 w-1/2'
-        onSubmit={form.handleSubmit(onSubmit)}>
+        className="my-4 w-1/2 space-y-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="image" className="text-leaf font-semibold">Foto Product</FormLabel>
+              <FormLabel
+                htmlFor="image"
+                className="font-semibold text-leaf"
+              >
+                Foto Product
+              </FormLabel>
               <FormControl>
                 <div className="flex flex-col gap-2">
                   <Input
@@ -98,24 +78,24 @@ export default function FormAddProduct() {
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
-                      const files = e.target.files
+                      const files = e.target.files;
 
                       if (files) {
-                        const image = files[0]
-                        setImages(image)
-                        field.onChange(image)
+                        const image = files[0];
+                        setImages(image);
+                        field.onChange(image);
                       }
                     }}
-                    className="border-leaf border-2 border-dashed text-leaf file:text-carrot cursor-pointer file:cursor-pointer"
+                    className="cursor-pointer border-2 border-dashed border-leaf text-leaf file:cursor-pointer file:text-carrot"
                   />
                   {images && (
-                    <div className='border p-4 rounded-md relative'>
-                      <div className='relative w-14 h-14'>
+                    <div className="relative rounded-md border p-4">
+                      <div className="relative size-14">
                         <Image
                           src={URL.createObjectURL(images)}
                           alt={images.name}
                           fill
-                          className='object-contain'
+                          className="object-contain"
                         />
                       </div>
                       <Button
@@ -123,14 +103,14 @@ export default function FormAddProduct() {
                         onClick={() => {
                           form.reset({
                             image: undefined,
-                          })
-                          setImages(undefined)
+                          });
+                          setImages(undefined);
                         }}
-                        size={'icon'}
-                        variant={'outline'}
-                        className="absolute top-0 right-0"
+                        size={"icon"}
+                        variant={"outline"}
+                        className="absolute right-0 top-0"
                       >
-                        <X className="h-5 w-5" />
+                        <X className="size-5" />
                       </Button>
                     </div>
                   )}
@@ -145,7 +125,12 @@ export default function FormAddProduct() {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="title" className="text-leaf font-semibold">Nama Product</FormLabel>
+              <FormLabel
+                htmlFor="title"
+                className="font-semibold text-leaf"
+              >
+                Nama Product
+              </FormLabel>
               <FormControl>
                 <Input
                   id="title"
@@ -164,16 +149,24 @@ export default function FormAddProduct() {
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="price" className="text-leaf font-semibold">Harga Product</FormLabel>
+              <FormLabel
+                htmlFor="price"
+                className="font-semibold text-leaf"
+              >
+                Harga Product
+              </FormLabel>
               <FormControl>
                 <div className="relative">
-                  <p className="absolute left-3 top-2 text-sm font-medium text-leaf">Rp</p>
+                  <p className="absolute left-3 top-2 text-sm font-medium text-leaf">
+                    Rp
+                  </p>
                   <Input
                     id="price"
                     type="number"
                     placeholder="Harga Produk"
                     {...field}
-                    className="pl-10 border-leaf placeholder:text-leaf-hover" />
+                    className="border-leaf pl-10 placeholder:text-leaf-hover"
+                  />
                 </div>
               </FormControl>
               <FormMessage />
@@ -185,7 +178,12 @@ export default function FormAddProduct() {
           name="stock"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="stock" className="text-leaf font-semibold">Stok Product</FormLabel>
+              <FormLabel
+                htmlFor="stock"
+                className="font-semibold text-leaf"
+              >
+                Stok Product
+              </FormLabel>
               <FormControl>
                 <Input
                   id="stock"
@@ -204,7 +202,12 @@ export default function FormAddProduct() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="description" className="text-leaf font-semibold">Deskripsi Product</FormLabel>
+              <FormLabel
+                htmlFor="description"
+                className="font-semibold text-leaf"
+              >
+                Deskripsi Product
+              </FormLabel>
               <FormControl>
                 <AutosizeTextarea
                   id="description"
@@ -225,17 +228,28 @@ export default function FormAddProduct() {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="category" className="text-leaf font-semibold">Kategori Product</FormLabel>
+              <FormLabel
+                htmlFor="category"
+                className="font-semibold text-leaf"
+              >
+                Kategori Product
+              </FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <SelectTrigger className='border-leaf placeholder:text-leaf text-leaf'>
+                    <SelectTrigger className="border-leaf text-leaf placeholder:text-leaf">
                       <SelectValue placeholder="Kategori Produk" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className='text-leaf'>
+                  <SelectContent className="text-leaf">
                     {ProductCategoryJSON.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                      <SelectItem
+                        key={category.id}
+                        value={category.id}
+                      >
                         {category.title}
                       </SelectItem>
                     ))}
@@ -251,27 +265,27 @@ export default function FormAddProduct() {
           name="unit"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="unit" className="text-leaf font-semibold">Unit Product</FormLabel>
+              <FormLabel
+                htmlFor="unit"
+                className="font-semibold text-leaf"
+              >
+                Unit Product
+              </FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <SelectTrigger className='border-leaf placeholder:text-leaf text-leaf'>
+                    <SelectTrigger className="border-leaf text-leaf placeholder:text-leaf">
                       <SelectValue placeholder="Unit Produk" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className='text-leaf'>
-                    <SelectItem value="pcs">
-                      pcs
-                    </SelectItem>
-                    <SelectItem value="kg">
-                      kg
-                    </SelectItem>
-                    <SelectItem value="gr">
-                      gr
-                    </SelectItem>
-                    <SelectItem value="ml">
-                      ml
-                    </SelectItem>
+                  <SelectContent className="text-leaf">
+                    <SelectItem value="pcs">pcs</SelectItem>
+                    <SelectItem value="kg">kg</SelectItem>
+                    <SelectItem value="gr">gr</SelectItem>
+                    <SelectItem value="ml">ml</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -280,12 +294,12 @@ export default function FormAddProduct() {
           )}
         />
         <Button
-          type='submit'
-          className='w-full'
+          type="submit"
+          className="w-full"
         >
           Simpan Produk
         </Button>
       </form>
     </Form>
-  )
+  );
 }
